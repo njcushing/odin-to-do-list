@@ -1,12 +1,12 @@
 import { clampNumber, clampDayInMonth } from "./../useful.js";
-import checklist from "./item-checklist.js";
+import checklistItem from "./item-checklist.js";
 
 const toDoItem = () => {
     let name = "Default Name";
     let description = "Empty";
     let dueDate = new Date();
     let priority = 0;
-    let checklistObj = checklist();
+    let checklist = [];
     let notes = "Empty";
 
     const setName = (x) => {
@@ -65,6 +65,13 @@ const toDoItem = () => {
         return priority;
     };
 
+    const addChecklistItem = (x) => {
+        checklist.push(checklistItem());
+    };
+    const getChecklist = () => {
+        return checklist;
+    };
+
     const setNotes = (x) => {
         if (typeof x !== "string") return;
         if (x.length > 500) x = x.slice(0, 500);
@@ -87,6 +94,8 @@ const toDoItem = () => {
         getDueDate,
         setPriority,
         getPriority,
+        addChecklistItem,
+        getChecklist,
         setNotes,
         getNotes,
     };
