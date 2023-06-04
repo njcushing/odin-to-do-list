@@ -1,4 +1,4 @@
-const checklistItem = (n, s) => {
+const checklistItem = (n = "Checklist Item", s = false) => {
     let name = "Checklist Item";
     if (typeof n === "string") name = n;
     let state = false;
