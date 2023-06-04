@@ -5,6 +5,7 @@ const toDoProject = (n = "Project Name") => {
     if (typeof n === "string") name = n;
     let sort = "NO_SORT";
     let items = [];
+    let dateCreated = new Date();
 
     const setName = (x) => {
         if (typeof x !== "string") return;
@@ -42,6 +43,11 @@ const toDoProject = (n = "Project Name") => {
         return items;
     };
 
+    const getDateCreated = () => {
+        /* Return string instead of object for security */
+        return dateCreated.toString();
+    };
+
     return {
         setName,
         getName,
@@ -51,6 +57,7 @@ const toDoProject = (n = "Project Name") => {
         removeToDoItem,
         getToDoItem,
         getToDoItems,
+        getDateCreated,
     };
 };
 export default toDoProject;
