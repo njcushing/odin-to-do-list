@@ -29,27 +29,29 @@ const toDoItem = () => {
 
     const setDueDateYear = (x) => {
         if (typeof x !== "number") return;
-        clampNumber(x, new Date.getFullYear(), 3000);
+        const getYear = new Date();
+        x = clampNumber(x, getYear.getFullYear(), getYear.getFullYear() + 100);
         dueDate.setFullYear(Math.floor(x));
     };
     const setDueDateMonth = (x) => {
+        /* Takes a month from 1-12 */
         if (typeof x !== "number") return;
-        clampNumber(x, 0, 11);
-        dueDate.setMonth(Math.floor(x));
+        x = clampNumber(x, 1, 12);
+        dueDate.setMonth(Math.floor(x - 1));
     };
     const setDueDateDay = (x) => {
         if (typeof x !== "number") return;
-        clampDayInMonth(dueDate.getFullYear(), dueDate.getMonth(), x);
+        x = clampDayInMonth(dueDate.getFullYear(), dueDate.getMonth() + 1, x);
         dueDate.setDate(Math.floor(x));
     };
     const setDueDateHour = (x) => {
         if (typeof x !== "number") return;
-        clampNumber(x, 0, 23);
+        x = clampNumber(x, 0, 23);
         dueDate.setHours(Math.floor(x));
     };
     const setDueDateMinute = (x) => {
         if (typeof x !== "number") return;
-        clampNumber(x, 0, 59);
+        x = clampNumber(x, 0, 59);
         dueDate.setMinutes(Math.floor(x));
     };
     const getDueDate = () => {
@@ -58,15 +60,17 @@ const toDoItem = () => {
 
     const setPriority = (x) => {
         if (typeof x !== "number") return;
-        clampNumber(x, 0, 5);
+        x = clampNumber(x, 0, 5);
         priority = Math.floor(x);
     };
     const getPriority = () => {
         return priority;
     };
 
-    const addChecklistItem = (x) => {
+    const addChecklistItem = (n, s) => {
         checklist.push(checklistItem());
+        checklist[checklist.length - 1].setName(n);
+        checklist[checklist.length - 1].setState(s);
     };
     const getChecklist = () => {
         return checklist;

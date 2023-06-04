@@ -14,19 +14,17 @@ const clampDayInMonth = (year, month, day) => {
         case 8:
         case 10:
         case 12:
-            clampNumber(day, 1, 31);
-            return day;
+            return clampNumber(day, 1, 31);
         case 4:
         case 6:
         case 9:
         case 11:
-            clampNumber(day, 1, 30);
-            return day;
+            return clampNumber(day, 1, 30);
         case 2:
-            if (year % 400 === 0) clampNumber(day, 1, 29);
-            else if (year % 100 === 0) clampNumber(day, 1, 28);
-            else if (year % 4 === 0) clampNumber(day, 1, 29);
-            return day;
+            if (year % 400 === 0) return clampNumber(day, 1, 29);
+            else if (year % 100 === 0) return clampNumber(day, 1, 28);
+            else if (year % 4 === 0) return clampNumber(day, 1, 29);
+            return clampNumber(day, 1, 28);
         default:
             return 1;
     }

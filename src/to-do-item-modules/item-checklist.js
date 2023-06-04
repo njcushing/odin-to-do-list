@@ -28,4 +28,5 @@ const checklistItem = (n, s) => {
         getState,
     };
 };
+
 export default checklistItem;
