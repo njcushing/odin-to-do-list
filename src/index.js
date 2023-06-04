@@ -1,5 +1,6 @@
 import "./styles.css";
 import toDoProject from "./project-modules/to-do-project.js";
+import { format } from "date-fns";
 
 const displayController = (() => {
     let page;
@@ -63,14 +64,55 @@ const displayController = (() => {
         for (let i = 0; i < projectList.length; i++) {
             projectContainer.appendChild(createProjectPanel(projectList[i]));
         }
+
+        let newProjectPanel = document.createElement("div");
+        newProjectPanel.classList.add("new-project-panel");
+        projectContainer.appendChild(newProjectPanel);
+
+        let newProjectName = document.createElement("h2");
+        newProjectName.classList.add("new-project-panel-name", "no-select");
+        newProjectName.textContent = "New Project";
+        newProjectPanel.appendChild(newProjectName);
+
+        let newProjectPlus = document.createElement("h2");
+        newProjectPlus.classList.add("new-project-panel-plus", "no-select");
+        newProjectPlus.textContent = "+";
+        newProjectPanel.appendChild(newProjectPlus);
     };
-    const displayProject = () => {};
-    const createProjectPanel = () => {
+    const createProjectPanel = (project) => {
+        const toDoList = project.getToDoItems();
+
         let panel = document.createElement("div");
         panel.classList.add("project-panel");
-        panel.textContent = "placeholder";
+
+        let projectName = document.createElement("h2");
+        projectName.classList.add("project-panel-name", "no-select");
+        projectName.textContent = project.getName();
+        panel.appendChild(projectName);
+
+        let projectNumberOfItems = document.createElement("h6");
+        projectNumberOfItems.classList.add(
+            "project-panel-number-of-items",
+            "no-select"
+        );
+        projectNumberOfItems.textContent = `Number of Items: ${toDoList.length}`;
+        panel.appendChild(projectNumberOfItems);
+
+        let projectDateCreated = document.createElement("h4");
+        projectDateCreated.classList.add(
+            "project-panel-date-created",
+            "no-select"
+        );
+        projectDateCreated.textContent = `Created ${format(
+            project.getDateCreated(),
+            "do MMMM yyyy"
+        )}`;
+        panel.appendChild(projectDateCreated);
+
         return panel;
     };
+
+    const displayProject = () => {};
 
     refreshContent();
 })();

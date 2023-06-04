@@ -44,8 +44,7 @@ const toDoProject = (n = "Project Name") => {
     };
 
     const getDateCreated = () => {
-        /* Return string instead of object for security */
-        return dateCreated.toString();
+        return dateCreated;
     };
 
     return {
