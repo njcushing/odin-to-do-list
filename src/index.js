@@ -1,6 +1,7 @@
 import "./styles.css";
 import toDoProject from "./project-modules/to-do-project.js";
 import { format } from "date-fns";
+import WebFont from "webfontloader";
 
 const displayController = (() => {
     let page;
@@ -123,7 +124,11 @@ const displayController = (() => {
         buttons.classList.add("project-panel-buttons-container");
 
         let deleteButton = document.createElement("button");
-        deleteButton.classList.add("project-panel-buttons-delete");
+        deleteButton.classList.add(
+            "project-panel-buttons-delete",
+            "material-symbols-rounded"
+        );
+        deleteButton.textContent = "Schedule";
         buttons.appendChild(deleteButton);
 
         return buttons;
