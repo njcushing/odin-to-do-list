@@ -5,7 +5,7 @@ const displayController = (() => {
     let page;
     let header;
     let content;
-    let currentProject = 0;
+    let currentProject = -1;
 
     const createPage = (() => {
         page = document.createElement("div");
@@ -42,8 +42,35 @@ const displayController = (() => {
         };
     })();
 
+    projects.newProject("test-project-1");
+    projects.newProject("test-project-2");
+    projects.newProject("test-project-3");
+    projects.newProject("test-project-4");
+
     const refreshContent = () => {
         if (!content) return;
         while (content.firstChild) content.remove(content.lastChild);
+        if (currentProject === -1) displayProjectList();
+        else displayProject();
     };
+
+    const displayProjectList = () => {
+        const projectContainer = document.createElement("div");
+        projectContainer.classList.add("project-container");
+        content.appendChild(projectContainer);
+
+        const projectList = projects.getProjects();
+        for (let i = 0; i < projectList.length; i++) {
+            projectContainer.appendChild(createProjectPanel(projectList[i]));
+        }
+    };
+    const displayProject = () => {};
+    const createProjectPanel = () => {
+        let panel = document.createElement("div");
+        panel.classList.add("project-panel");
+        panel.textContent = "placeholder";
+        return panel;
+    };
+
+    refreshContent();
 })();
