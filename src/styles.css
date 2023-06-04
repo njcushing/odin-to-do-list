@@ -74,7 +74,7 @@ body {
     display: grid;
     grid-template-rows: 1fr repeat(2, auto);
     text-align: center;
-    border-radius: 0.8rem;
+    border-radius: 0.6rem;
     height: 280px;
     padding: 16px 18px 14px 18px;
     gap: 6px;
@@ -115,7 +115,34 @@ body {
 .content .new-project-panel-plus {
     align-self: center;
     color: rgb(46, 46, 46);
-    font-size: 3rem;
+    font-size: 5rem;
+    font-weight: normal;
+}
+.content .project-panel-separator {
+    justify-self: center;
+    border-radius: 9999px;
+    width: 104%;
+    height: 2px;
+    background-color: #dadada;
+    margin-bottom: 6px;
+}
+.content .project-panel-buttons-container {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+.content .project-panel-buttons-delete {
+    width: 30px;
+    height: 30px;
+    border: none;
+    border-radius: 4px;
+    background-color: #e73333;
+}
+.content .project-panel-buttons-delete:hover {
+    background-color: #f54e4e;
+}
+.content .project-panel-buttons-delete:active {
+    background-color: #c51717;
 }
 
 /* Project Tab / To-Do List */

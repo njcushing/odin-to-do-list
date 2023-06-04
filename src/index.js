@@ -79,6 +79,7 @@ const displayController = (() => {
         newProjectPlus.textContent = "+";
         newProjectPanel.appendChild(newProjectPlus);
     };
+
     const createProjectPanel = (project) => {
         const toDoList = project.getToDoItems();
 
@@ -109,7 +110,23 @@ const displayController = (() => {
         )}`;
         panel.appendChild(projectDateCreated);
 
+        let separator = document.createElement("div");
+        separator.classList.add("project-panel-separator");
+        panel.appendChild(separator);
+
+        panel.appendChild(createProjectPanelButtons());
+
         return panel;
+    };
+    const createProjectPanelButtons = () => {
+        let buttons = document.createElement("div");
+        buttons.classList.add("project-panel-buttons-container");
+
+        let deleteButton = document.createElement("button");
+        deleteButton.classList.add("project-panel-buttons-delete");
+        buttons.appendChild(deleteButton);
+
+        return buttons;
     };
 
     const displayProject = () => {};
