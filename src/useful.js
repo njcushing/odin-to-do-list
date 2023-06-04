@@ -1,4 +1,4 @@
-/* A library containing useful functions I use often */
+/* A library containing useful functions I often use */
 
 const clampNumber = (num, a, b) =>
     Math.max(Math.min(num, Math.max(a, b)), Math.min(a, b));

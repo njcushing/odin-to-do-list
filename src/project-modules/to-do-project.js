@@ -28,6 +28,16 @@ const toDoProject = (n = "Project Name") => {
         items.push(newItem);
         return newItem;
     };
+    const removeToDoItem = (x) => {
+        if (typeof x !== "number") return;
+        if (x < 0 || x >= items.length) return;
+        items.splice(x, 1);
+    };
+    const getToDoItem = (x) => {
+        if (typeof x !== "number") return;
+        if (x < 0 || x >= items.length) return;
+        return items[x];
+    };
     const getToDoItems = () => {
         return items;
     };
@@ -38,6 +48,8 @@ const toDoProject = (n = "Project Name") => {
         setSort,
         getSort,
         addToDoItem,
+        removeToDoItem,
+        getToDoItem,
         getToDoItems,
     };
 };
