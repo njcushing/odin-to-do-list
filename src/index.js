@@ -1,7 +1,13 @@
 import "./styles.css";
+import projectListTabStyles from "./project-modules/styles-tab-projectlist.lazy.css";
 import toDoProject from "./project-modules/to-do-project.js";
 import { format } from "date-fns";
 import WebFont from "webfontloader";
+WebFont.load({
+    google: {
+        families: ["Material+Symbols+Rounded:opsz,wght,FILL,GRAD@48,400,1,0"],
+    },
+});
 
 const displayController = (() => {
     let page;
@@ -52,6 +58,7 @@ const displayController = (() => {
     const refreshContent = () => {
         if (!content) return;
         while (content.firstChild) content.remove(content.lastChild);
+        projectListTabStyles.unuse();
         if (currentProject === -1) displayProjectList();
         else displayProject();
     };
@@ -82,6 +89,8 @@ const displayController = (() => {
     };
 
     const createProjectPanel = (project) => {
+        projectListTabStyles.use();
+
         const toDoList = project.getToDoItems();
 
         let panel = document.createElement("div");
@@ -126,7 +135,8 @@ const displayController = (() => {
         let deleteButton = document.createElement("button");
         deleteButton.classList.add(
             "project-panel-buttons-delete",
-            "material-symbols-rounded"
+            "material-symbols-rounded",
+            "no-select"
         );
         deleteButton.textContent = "Schedule";
         buttons.appendChild(deleteButton);
