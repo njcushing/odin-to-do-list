@@ -132,13 +132,22 @@ const displayController = (() => {
         let buttons = document.createElement("div");
         buttons.classList.add("project-panel-buttons-container");
 
+        let editButton = document.createElement("button");
+        editButton.classList.add(
+            "project-panel-buttons-edit",
+            "material-symbols-rounded",
+            "no-select"
+        );
+        editButton.textContent = "Edit";
+        buttons.appendChild(editButton);
+
         let deleteButton = document.createElement("button");
         deleteButton.classList.add(
             "project-panel-buttons-delete",
             "material-symbols-rounded",
             "no-select"
         );
-        deleteButton.textContent = "Schedule";
+        deleteButton.textContent = "Delete";
         buttons.appendChild(deleteButton);
 
         return buttons;
