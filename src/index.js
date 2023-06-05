@@ -1,13 +1,7 @@
 import "./styles.css";
-import projectListTabStyles from "./project-modules/styles-tab-projectlist.lazy.css";
 import toDoProject from "./project-modules/to-do-project.js";
-import { format } from "date-fns";
-import WebFont from "webfontloader";
-WebFont.load({
-    google: {
-        families: ["Material+Symbols+Rounded:opsz,wght,FILL,GRAD@48,400,1,0"],
-    },
-});
+import toDoProjectPanel from "./project-modules/to-do-project-panel.js";
+import projectListTabStyles from "./project-modules/styles-tab-projectlist.lazy.css";
 
 const displayController = (() => {
     let page;
@@ -59,8 +53,10 @@ const displayController = (() => {
         if (!content) return;
         while (content.firstChild) content.remove(content.lastChild);
         projectListTabStyles.unuse();
-        if (currentProject === -1) displayProjectList();
-        else displayProject();
+        if (currentProject === -1) {
+            projectListTabStyles.use();
+            displayProjectList();
+        } else displayProject();
     };
 
     const displayProjectList = () => {
@@ -70,7 +66,7 @@ const displayController = (() => {
 
         const projectList = projects.getProjects();
         for (let i = 0; i < projectList.length; i++) {
-            projectContainer.appendChild(createProjectPanel(projectList[i]));
+            projectContainer.appendChild(toDoProjectPanel(projectList[i]));
         }
 
         let newProjectPanel = document.createElement("div");
@@ -86,71 +82,6 @@ const displayController = (() => {
         newProjectPlus.classList.add("new-project-panel-plus", "no-select");
         newProjectPlus.textContent = "+";
         newProjectPanel.appendChild(newProjectPlus);
-    };
-
-    const createProjectPanel = (project) => {
-        projectListTabStyles.use();
-
-        const toDoList = project.getToDoItems();
-
-        let panel = document.createElement("div");
-        panel.classList.add("project-panel");
-
-        let projectName = document.createElement("h2");
-        projectName.classList.add("project-panel-name", "no-select");
-        projectName.textContent = project.getName();
-        panel.appendChild(projectName);
-
-        let projectNumberOfItems = document.createElement("h6");
-        projectNumberOfItems.classList.add(
-            "project-panel-number-of-items",
-            "no-select"
-        );
-        projectNumberOfItems.textContent = `Number of Items: ${toDoList.length}`;
-        panel.appendChild(projectNumberOfItems);
-
-        let projectDateCreated = document.createElement("h4");
-        projectDateCreated.classList.add(
-            "project-panel-date-created",
-            "no-select"
-        );
-        projectDateCreated.textContent = `Created ${format(
-            project.getDateCreated(),
-            "do MMMM yyyy"
-        )}`;
-        panel.appendChild(projectDateCreated);
-
-        let separator = document.createElement("div");
-        separator.classList.add("project-panel-separator");
-        panel.appendChild(separator);
-
-        panel.appendChild(createProjectPanelButtons());
-
-        return panel;
-    };
-    const createProjectPanelButtons = () => {
-        let buttons = document.createElement("div");
-        buttons.classList.add("project-panel-buttons-container");
-
-        let editButton = document.createElement("button");
-        editButton.classList.add(
-            "project-panel-buttons-edit",
-            "material-symbols-rounded",
-            "no-select"
-        );
-        editButton.textContent = "Edit";
-        buttons.appendChild(editButton);
-
-        let deleteButton = document.createElement("button");
-        deleteButton.classList.add(
-            "project-panel-buttons-delete",
-            "material-symbols-rounded",
-            "no-select"
-        );
-        deleteButton.textContent = "Delete";
-        buttons.appendChild(deleteButton);
-
-        return buttons;
     };
 
     const displayProject = () => {};
