@@ -114,7 +114,23 @@ const displayController = (() => {
         newProjectPanel.appendChild(newProjectPlus);
     };
 
-    const displayProject = () => {};
+    const displayProject = () => {
+        let buttons = document.createElement("div");
+        buttons.classList.add("project-buttons-container");
+        content.appendChild(buttons);
+
+        let returnToListButton = document.createElement("button");
+        returnToListButton.classList.add(
+            "project-buttons-return-to-list",
+            "no-select"
+        );
+        returnToListButton.textContent = "Return to List";
+        buttons.appendChild(returnToListButton);
+        returnToListButton.addEventListener("click", () => {
+            currentProject = -1;
+            refreshContent();
+        });
+    };
 
     refreshContent();
 })();
