@@ -51,7 +51,7 @@ const displayController = (() => {
 
     const refreshContent = () => {
         if (!content) return;
-        while (content.firstChild) content.remove(content.lastChild);
+        while (content.firstChild) content.lastChild.remove();
         projectListTabStyles.unuse();
         if (currentProject === -1) {
             projectListTabStyles.use();
@@ -66,7 +66,14 @@ const displayController = (() => {
 
         const projectList = projects.getProjects();
         for (let i = 0; i < projectList.length; i++) {
-            projectContainer.appendChild(toDoProjectPanel(projectList[i]));
+            const newPanel = toDoProjectPanel(projectList[i]);
+            projectContainer.appendChild(newPanel.panel);
+            newPanel.editButton.addEventListener("click", () => {
+                editProject(i);
+            });
+            newPanel.deleteButton.addEventListener("click", () => {
+                editProject(i);
+            });
         }
 
         let newProjectPanel = document.createElement("div");
@@ -85,6 +92,15 @@ const displayController = (() => {
     };
 
     const displayProject = () => {};
+
+    const editProject = (i) => {
+        currentProject = i;
+        refreshContent();
+    };
+
+    const deleteProject = (i) => {
+        return;
+    };
 
     refreshContent();
 })();

@@ -60,6 +60,10 @@ const toDoProjectPanel = (project) => {
 
     panel.appendChild(buttons);
 
-    return panel;
+    return {
+        panel,
+        editButton,
+        deleteButton,
+    };
 };
 export default toDoProjectPanel;
