@@ -1,7 +1,8 @@
 import "./styles.css";
 import toDoProject from "./project-modules/to-do-project.js";
 import toDoProjectPanel from "./project-modules/to-do-project-panel.js";
-import projectListTabStyles from "./project-modules/styles-tab-projectlist.lazy.css";
+import projectListTabStyles from "./styles/styles-tab-projectlist.lazy.css";
+import projectTabStyles from "./styles/styles-tab-project.lazy.css";
 
 const displayController = (() => {
     let page;
@@ -31,16 +32,25 @@ const displayController = (() => {
 
         const newProject = (n) => {
             const newProject = toDoProject(n);
-            projectList.push(newProject);
+            projectList.push({
+                name: n,
+                project: newProject,
+            });
             return newProject;
         };
         const getProjects = () => {
             return projectList;
         };
+        const removeProject = (n) => {
+            for (let i = 0; i < projectList.length; i++) {
+                if (projectList[i].name === n) projectList.splice(i, 1);
+            }
+        };
 
         return {
             newProject,
             getProjects,
+            removeProject,
         };
     })();
 
@@ -53,10 +63,14 @@ const displayController = (() => {
         if (!content) return;
         while (content.firstChild) content.lastChild.remove();
         projectListTabStyles.unuse();
+        projectTabStyles.unuse();
         if (currentProject === -1) {
             projectListTabStyles.use();
             displayProjectList();
-        } else displayProject();
+        } else {
+            projectTabStyles.use();
+            displayProject();
+        }
     };
 
     const displayProjectList = () => {
@@ -66,13 +80,22 @@ const displayController = (() => {
 
         const projectList = projects.getProjects();
         for (let i = 0; i < projectList.length; i++) {
-            const newPanel = toDoProjectPanel(projectList[i]);
+            const newPanel = toDoProjectPanel(projectList[i].project);
+            newPanel.panel.setAttribute("index", i);
             projectContainer.appendChild(newPanel.panel);
             newPanel.editButton.addEventListener("click", () => {
-                editProject(i);
+                currentProject = newPanel.panel.getAttribute("index");
+                refreshContent();
             });
             newPanel.deleteButton.addEventListener("click", () => {
-                editProject(i);
+                const projectList = projects.getProjects();
+                projects.removeProject(
+                    projectList[newPanel.panel.getAttribute("index")].name
+                );
+                newPanel.panel.remove();
+                for (let i = 0; i < projectContainer.children.length; i++) {
+                    projectContainer.children[i].setAttribute("index", i);
+                }
             });
         }
 
@@ -92,15 +115,6 @@ const displayController = (() => {
     };
 
     const displayProject = () => {};
-
-    const editProject = (i) => {
-        currentProject = i;
-        refreshContent();
-    };
-
-    const deleteProject = (i) => {
-        return;
-    };
 
     refreshContent();
 })();
