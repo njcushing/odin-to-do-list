@@ -22,14 +22,6 @@ const domToDoItem = (item) => {
 
         let dueDate = document.createElement("h4");
         dueDate.classList.add("to-do-item-due-date", "no-select");
-        dueDate.textContent = `Due on ${format(
-            toDoItem.getDueDate(),
-            "do MMMM yyyy"
-        )}`;
-        panel.appendChild(dueDate);
-
-        let timeRemaining = document.createElement("h4");
-        timeRemaining.classList.add("to-do-item-time-remaining", "no-select");
         let duration = intervalToDuration({
             start: new Date(),
             end: toDoItem.getDueDate(),
@@ -46,22 +38,26 @@ const domToDoItem = (item) => {
         const nonzero = Object.entries(duration)
             .filter(([_, value]) => value || 0 > 0)
             .map(([unit, _]) => unit);
-        timeRemaining.textContent = `${formatDuration(duration, {
+        dueDate.textContent = `Due on ${format(
+            toDoItem.getDueDate(),
+            "do MMMM yyyy"
+        )} in 
+        ${formatDuration(duration, {
             format: units.filter((i) => new Set(nonzero).has(i)).slice(0, 2),
             delimiter: ", ",
         })}`;
-        panel.appendChild(timeRemaining);
+        panel.appendChild(dueDate);
 
         let priority = document.createElement("div");
         priority.classList.add("to-do-item-priority");
-        for (let i = 0; i < 5; i++) {
+        for (let i = 4; i >= 0; i--) {
             let priorityStar = document.createElement("h4");
             priorityStar.classList.add(
                 "to-do-item-priority-star",
                 "material-symbols-rounded"
             );
             priorityStar.textContent = "Star";
-            if (i > toDoItem.getPriority()) {
+            if (i >= toDoItem.getPriority()) {
                 priorityStar.classList.add("to-do-item-priority-star-off");
             } else {
                 priorityStar.classList.add("to-do-item-priority-star-on");

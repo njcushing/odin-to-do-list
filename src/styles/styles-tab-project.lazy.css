@@ -1,7 +1,9 @@
 .content {
     display: grid;
     grid-template-rows: auto 1fr;
-    gap: 10px;
+    min-width: 900px;
+    max-width: 1440px;
+    gap: 20px;
 }
 
 .project-buttons-container {
@@ -43,14 +45,44 @@
 .project-to-do-items-container {
     display: grid;
     grid-template-rows: auto;
+    align-content: start;
     gap: 10px;
 }
 
 .to-do-item {
-    align-self: start;
     align-items: center;
     display: grid;
-    grid-template-columns: repeat(4, 25%);
-    background-color: #cccccc;
-    padding: 0.2rem 1rem;
+    grid-template-columns: 1fr repeat(3, auto);
+    background-color: #d8d8d8;
+    padding: 0.2rem 0.4rem 0.2rem 1rem;
+    gap: 10px;
+}
+
+.to-do-item-name {
+    font-size: 1.2rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.to-do-item-due-date {
+    justify-self: end;
+    font-size: 0.8rem;
+    color: rgb(70, 70, 70);
+    white-space: nowrap;
+}
+
+.to-do-item-priority {
+    display: flex;
+    flex-wrap: nowrap;
+}
+.to-do-item-priority-star {
+    font-size: 1.2rem;
+    margin: 0px -4px;
+}
+.to-do-item-priority-star-on {
+    color: gold;
+}
+.to-do-item-priority-star-off {
+    color: rgb(70, 70, 70);
 }

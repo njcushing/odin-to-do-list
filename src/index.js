@@ -69,9 +69,17 @@ const displayController = (() => {
 
     const p1 = projects.newProject("test-project-1");
     const p1_i1 = p1.addToDoItem();
-    p1_i1.setName("test-item");
+    p1_i1.setName("test-item-1");
     p1_i1.setDueDateYear(2024);
     p1_i1.setDueDateMonth(11);
+    const p1_i2 = p1.addToDoItem();
+    p1_i2.setName("test-item-2");
+    p1_i2.setDueDateYear(2025);
+    p1_i2.setDueDateMonth(3);
+    const p1_i3 = p1.addToDoItem();
+    p1_i3.setName("test-item-3");
+    p1_i3.setDueDateYear(2027);
+    p1_i3.setDueDateMonth(1);
 
     projects.newProject("test-project-2");
     projects.newProject("test-project-3");
