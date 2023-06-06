@@ -1,6 +1,7 @@
 import "./styles.css";
 import toDoProject from "./project-modules/to-do-project.js";
 import domToDoProject from "./project-modules/dom_to-do-project.js";
+import domToDoItem from "./to-do-item-modules/dom_to-do-item.js";
 import projectListTabStyles from "./styles/styles-tab-projectlist.lazy.css";
 import projectTabStyles from "./styles/styles-tab-project.lazy.css";
 import WebFont from "webfontloader";
@@ -66,7 +67,12 @@ const displayController = (() => {
         };
     })();
 
-    projects.newProject("test-project-1");
+    const p1 = projects.newProject("test-project-1");
+    const p1_i1 = p1.addToDoItem();
+    p1_i1.setName("test-item");
+    p1_i1.setDueDateYear(2024);
+    p1_i1.setDueDateMonth(11);
+
     projects.newProject("test-project-2");
     projects.newProject("test-project-3");
     projects.newProject("test-project-4");
@@ -128,9 +134,10 @@ const displayController = (() => {
     };
 
     const displayProject = () => {
-        const projectList = projects.getProjects();
+        const project = projects.getProjects()[currentProject];
+        const toDoItems = project.project.getToDoItems();
 
-        title.textContent = projectList[currentProject].name;
+        title.textContent = project.name;
 
         let buttons = document.createElement("div");
         buttons.classList.add("project-buttons-container");
@@ -166,6 +173,14 @@ const displayController = (() => {
         );
         sortToDoItemsButton.textContent = "Sort";
         buttons.appendChild(sortToDoItemsButton);
+
+        let toDoItemsContainer = document.createElement("div");
+        toDoItemsContainer.classList.add("project-to-do-items-container");
+        content.appendChild(toDoItemsContainer);
+
+        toDoItems.forEach((item) => {
+            toDoItemsContainer.appendChild(domToDoItem(item));
+        });
     };
 
     refreshContent();
