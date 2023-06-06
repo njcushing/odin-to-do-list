@@ -1,14 +1,21 @@
 import "./styles.css";
 import toDoProject from "./project-modules/to-do-project.js";
-import toDoProjectPanel from "./project-modules/to-do-project-panel.js";
+import domToDoProject from "./project-modules/dom_to-do-project.js";
 import projectListTabStyles from "./styles/styles-tab-projectlist.lazy.css";
 import projectTabStyles from "./styles/styles-tab-project.lazy.css";
+import WebFont from "webfontloader";
+WebFont.load({
+    google: {
+        families: ["Material+Symbols+Rounded:opsz,wght,FILL,GRAD@48,400,1,0"],
+    },
+});
 
 const displayController = (() => {
     let page;
     let header;
+    let title;
     let content;
-    let currentProject = -1;
+    let currentProject = 0;
 
     const createPage = (() => {
         page = document.createElement("div");
@@ -21,9 +28,8 @@ const displayController = (() => {
         content.classList.add("content");
         page.appendChild(content);
 
-        const title = document.createElement("h1");
+        title = document.createElement("h1");
         title.classList.add("title");
-        title.textContent = "Placeholder Title";
         header.appendChild(title);
     })();
 
@@ -31,6 +37,12 @@ const displayController = (() => {
         let projectList = [];
 
         const newProject = (n) => {
+            projectList.forEach((project) => {
+                if (project.name === n) {
+                    alert("This project name is already taken.");
+                    return null;
+                }
+            });
             const newProject = toDoProject(n);
             projectList.push({
                 name: n,
@@ -64,6 +76,7 @@ const displayController = (() => {
         while (content.firstChild) content.lastChild.remove();
         projectListTabStyles.unuse();
         projectTabStyles.unuse();
+        title.textContent = "My Projects";
         if (currentProject === -1) {
             projectListTabStyles.use();
             displayProjectList();
@@ -80,7 +93,7 @@ const displayController = (() => {
 
         const projectList = projects.getProjects();
         for (let i = 0; i < projectList.length; i++) {
-            const newPanel = toDoProjectPanel(projectList[i].project);
+            const newPanel = domToDoProject(projectList[i].project);
             newPanel.panel.setAttribute("index", i);
             projectContainer.appendChild(newPanel.panel);
             newPanel.editButton.addEventListener("click", () => {
@@ -115,6 +128,10 @@ const displayController = (() => {
     };
 
     const displayProject = () => {
+        const projectList = projects.getProjects();
+
+        title.textContent = projectList[currentProject].name;
+
         let buttons = document.createElement("div");
         buttons.classList.add("project-buttons-container");
         content.appendChild(buttons);
@@ -122,14 +139,33 @@ const displayController = (() => {
         let returnToListButton = document.createElement("button");
         returnToListButton.classList.add(
             "project-buttons-return-to-list",
+            "material-symbols-rounded",
             "no-select"
         );
-        returnToListButton.textContent = "Return to List";
+        returnToListButton.textContent = "Format_List_Bulleted";
         buttons.appendChild(returnToListButton);
         returnToListButton.addEventListener("click", () => {
             currentProject = -1;
             refreshContent();
         });
+
+        let newToDoItemButton = document.createElement("button");
+        newToDoItemButton.classList.add(
+            "project-buttons-new-to-do-item",
+            "material-symbols-rounded",
+            "no-select"
+        );
+        newToDoItemButton.textContent = "Add";
+        buttons.appendChild(newToDoItemButton);
+
+        let sortToDoItemsButton = document.createElement("button");
+        sortToDoItemsButton.classList.add(
+            "project-buttons-sort-to-do-items",
+            "material-symbols-rounded",
+            "no-select"
+        );
+        sortToDoItemsButton.textContent = "Sort";
+        buttons.appendChild(sortToDoItemsButton);
     };
 
     refreshContent();

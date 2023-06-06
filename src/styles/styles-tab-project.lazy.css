@@ -1,0 +1,40 @@
+.content {
+    display: grid;
+    grid-template-rows: auto 1fr;
+}
+
+.project-buttons-container {
+    display: grid;
+    grid-template-columns: 1fr repeat(2, auto);
+    gap: 10px;
+}
+
+.project-buttons-container > button {
+    font-size: 1.4rem;
+    text-align: center;
+    width: 2.4rem;
+    height: 2.4rem;
+    border: none;
+    border-radius: 9999px;
+    color: white;
+    background-color: #bebebe;
+}
+
+.project-buttons-return-to-list:hover {
+    background-color: #3ea4d3;
+}
+.project-buttons-return-to-list:active {
+    background-color: #2082af;
+}
+.project-buttons-new-to-do-item:hover {
+    background-color: #47d147;
+}
+.project-buttons-new-to-do-item:active {
+    background-color: #22ad22;
+}
+.project-buttons-sort-to-do-items:hover {
+    background-color: #d3b221;
+}
+.project-buttons-sort-to-do-items:active {
+    background-color: #bb9c13;
+}
