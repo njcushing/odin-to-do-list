@@ -1,6 +1,7 @@
 .content {
     display: grid;
     grid-template-rows: auto 1fr;
+    gap: 10px;
 }
 
 .project-buttons-container {
@@ -37,4 +38,19 @@
 }
 .project-buttons-sort-to-do-items:active {
     background-color: #bb9c13;
+}
+
+.project-to-do-items-container {
+    display: grid;
+    grid-template-rows: auto;
+    gap: 10px;
+}
+
+.to-do-item {
+    align-self: start;
+    align-items: center;
+    display: grid;
+    grid-template-columns: repeat(4, 25%);
+    background-color: #cccccc;
+    padding: 0.2rem 1rem;
 }
