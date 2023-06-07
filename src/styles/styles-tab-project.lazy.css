@@ -117,7 +117,13 @@
     font-size: 1.2rem;
     margin: 0px -4px;
 }
-.to-do-item-priority-star-on {
+/* Using sibling selectors to access all 5 priority stars */
+.to-do-item-priority-star-on,
+.to-do-item-priority-star:hover,
+.to-do-item-priority-star:hover + .to-do-item-priority-star,
+.to-do-item-priority-star:hover + .to-do-item-priority-star + .to-do-item-priority-star,
+.to-do-item-priority-star:hover + .to-do-item-priority-star + .to-do-item-priority-star + .to-do-item-priority-star,
+.to-do-item-priority-star:hover + .to-do-item-priority-star + .to-do-item-priority-star + .to-do-item-priority-star + .to-do-item-priority-star {
     color: gold;
 }
 .to-do-item-priority-star-off {
