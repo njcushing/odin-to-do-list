@@ -136,20 +136,21 @@
     flex-wrap: nowrap;
 }
 .to-do-item-priority-star {
+    /*  Annoyingly, have to use negative margin here to get stars to align.
+        This causes an overlap zone where the cursor will not highlight the left-most
+        star until it is a certain distance over the right-hand side of the star icon. */
+    color: rgb(70, 70, 70);
     font-size: 1.2rem;
-    margin: 0px -4px;
+    margin: 0rem -0.2rem;
 }
 /* Using sibling selectors to access all 5 priority stars */
-.to-do-item-priority-star-on:not(:hover),
+.to-do-item-priority:not(:hover) .to-do-item-priority-star-on,
 .to-do-item-priority-star:hover,
 .to-do-item-priority-star:hover + .to-do-item-priority-star,
 .to-do-item-priority-star:hover + .to-do-item-priority-star + .to-do-item-priority-star,
 .to-do-item-priority-star:hover + .to-do-item-priority-star + .to-do-item-priority-star + .to-do-item-priority-star,
 .to-do-item-priority-star:hover + .to-do-item-priority-star + .to-do-item-priority-star + .to-do-item-priority-star + .to-do-item-priority-star {
     color: gold;
-}
-.to-do-item-priority-star-off {
-    color: rgb(70, 70, 70);
 }
 
 .to-do-item-expanded-information {
