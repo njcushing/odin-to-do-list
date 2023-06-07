@@ -147,9 +147,13 @@ const displayController = (() => {
 
         title.textContent = project.name;
 
+        let toDoListContainer = document.createElement("div");
+        toDoListContainer.classList.add("to-do-list-container");
+        content.appendChild(toDoListContainer);
+
         let buttons = document.createElement("div");
         buttons.classList.add("project-buttons-container");
-        content.appendChild(buttons);
+        toDoListContainer.appendChild(buttons);
 
         let returnToListButton = document.createElement("button");
         returnToListButton.classList.add(
@@ -184,7 +188,7 @@ const displayController = (() => {
 
         let toDoItemsContainer = document.createElement("div");
         toDoItemsContainer.classList.add("project-to-do-items-container");
-        content.appendChild(toDoItemsContainer);
+        toDoListContainer.appendChild(toDoItemsContainer);
 
         toDoItems.forEach((item) => {
             toDoItemsContainer.appendChild(domToDoItem(item));

@@ -1,9 +1,14 @@
 .content {
+    border: 1px solid #000;
+}
+
+.to-do-list-container {
     display: grid;
+    justify-content: center;
     grid-template-rows: auto 1fr;
-    min-width: 900px;
-    max-width: 1440px;
+    grid-template-columns: minmax(900px, 1280px);
     gap: 20px;
+    border: 1px solid #000;
 }
 
 .project-buttons-container {
