@@ -72,6 +72,7 @@ const displayController = (() => {
     p1_i1.setName("test-item-1");
     p1_i1.setDueDateYear(2024);
     p1_i1.setDueDateMonth(11);
+    p1_i1.setPriority(3);
     const p1_i2 = p1.addToDoItem();
     p1_i2.setName("test-item-2");
     p1_i2.setDueDateYear(2025);

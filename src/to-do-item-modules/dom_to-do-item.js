@@ -87,6 +87,14 @@ const domToDoItem = (item) => {
         }
         topBarInformation.appendChild(priority);
 
+        let editButton = document.createElement("button");
+        editButton.classList.add(
+            "to-do-item-edit-button",
+            "material-symbols-rounded"
+        );
+        editButton.textContent = "Edit";
+        e.appendChild(editButton);
+
         if (expanded) {
             let expandedInfo = document.createElement("div");
             expandedInfo.classList.add("to-do-item-expanded-information");

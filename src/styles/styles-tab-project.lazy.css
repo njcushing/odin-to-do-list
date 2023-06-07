@@ -1,14 +1,19 @@
+.header {
+    background-color: #ffffff;
+    box-shadow: 0px 4px 5px -0px rgba(128, 128, 128, 0.3);
+    z-index: 0;
+}
+
 .content {
-    border: 1px solid #000;
+    background-color: #e4e4e4;
 }
 
 .to-do-list-container {
     display: grid;
     justify-content: center;
-    grid-template-rows: auto 1fr;
+    grid-template-rows: auto 1fr auto;
     grid-template-columns: minmax(900px, 1280px);
     gap: 20px;
-    border: 1px solid #000;
 }
 
 .project-buttons-container {
@@ -24,24 +29,30 @@
     height: 2.4rem;
     border: none;
     border-radius: 9999px;
-    color: white;
-    background-color: #bebebe;
+    color: rgb(160, 160, 160);
+    background-color: #ffffff;
 }
 
 .project-buttons-return-to-list:hover {
+    color: rgb(236, 236, 236);
     background-color: #3ea4d3;
+    box-shadow: 0px 4px 5px -0px rgba(128, 128, 128, 0.3);
 }
 .project-buttons-return-to-list:active {
     background-color: #2082af;
 }
 .project-buttons-new-to-do-item:hover {
+    color: rgb(236, 236, 236);
     background-color: #47d147;
+    box-shadow: 0px 4px 5px -0px rgba(128, 128, 128, 0.3);
 }
 .project-buttons-new-to-do-item:active {
     background-color: #22ad22;
 }
 .project-buttons-sort-to-do-items:hover {
+    color: rgb(236, 236, 236);
     background-color: #d3b221;
+    box-shadow: 0px 4px 5px -0px rgba(128, 128, 128, 0.3);
 }
 .project-buttons-sort-to-do-items:active {
     background-color: #bb9c13;
@@ -58,35 +69,45 @@
     display: grid;
     grid-template-rows: repeat(2, auto);
     grid-template-columns: auto 1fr;
-    gap: 0.2rem 0.4rem;
+    gap: 0.0rem 0.4rem;
 }
 
 .to-do-item-expand-collapse-button {
     grid-area: 1 / 1 / 2 / 2;
+}
+.to-do-item-edit-button {
+    grid-area: 1 / 3 / 2 / -1;
+}
+.to-do-item-expand-collapse-button,
+.to-do-item-edit-button {
     font-size: 1.9rem;
     width: 2.4rem;
     height: 2.4rem;
     border: none;
-    color: rgb(122, 122, 122);
-    background-color: #e6e6e6;
+    color: rgb(160, 160, 160);
+    background-color: #ffffff;
+    box-shadow: 0px 4px 5px -0px rgba(128, 128, 128, 0.3);
     margin: 0px;
     padding: 0px;
 }
-.to-do-item-expand-collapse-button:hover {
+.to-do-item-expand-collapse-button:hover,
+.to-do-item-edit-button:hover {
     color: rgb(146, 146, 146);
     background-color: #eeeeee;
 }
-.to-do-item-expand-collapse-button:active {
+.to-do-item-expand-collapse-button:active,
+.to-do-item-edit-button:active {
     color: rgb(110, 110, 110);
     background-color: #cfcfcf;
 }
 
 .to-do-item-top-bar-information {
-    grid-area: 1 / 2 / 2 / -1;
+    grid-area: 1 / 2 / 2 / 3;
     align-items: center;
     display: grid;
     grid-template-columns: 1fr repeat(2, auto);
-    background-color: #e6e6e6;
+    background-color: #ffffff;
+    box-shadow: 0px 4px 5px -0px rgba(128, 128, 128, 0.3);
     height: 2.4rem;
     padding: 0.0rem 0.4rem;
     gap: 10px;
@@ -95,6 +116,7 @@
 .to-do-item-name {
     justify-self: start;
     font-size: 1.2rem;
+    color: rgb(50, 50, 50);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -118,7 +140,7 @@
     margin: 0px -4px;
 }
 /* Using sibling selectors to access all 5 priority stars */
-.to-do-item-priority-star-on,
+.to-do-item-priority-star-on:not(:hover),
 .to-do-item-priority-star:hover,
 .to-do-item-priority-star:hover + .to-do-item-priority-star,
 .to-do-item-priority-star:hover + .to-do-item-priority-star + .to-do-item-priority-star,
@@ -131,7 +153,8 @@
 }
 
 .to-do-item-expanded-information {
-    grid-area: 2 / 2 / -1 / -1;
-    height: 100px;
-    background-color: #e6e6e6;
+    grid-area: 2 / 2 / -1 / 3;
+    height: 200px;
+    background-color: #ffffff;
+    box-shadow: 0px 4px 5px -0px rgba(128, 128, 128, 0.3);
 }

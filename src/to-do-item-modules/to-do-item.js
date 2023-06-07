@@ -8,6 +8,7 @@ const toDoItem = () => {
     let priority = 0;
     let checklist = [];
     let notes = "Empty";
+    let completed = false;
 
     const setName = (x) => {
         if (typeof x !== "string") return;
@@ -85,6 +86,14 @@ const toDoItem = () => {
         return notes;
     };
 
+    const setCompleted = (x) => {
+        if (typeof x !== "boolean") return;
+        completed = x;
+    };
+    const getCompleted = () => {
+        return completed;
+    };
+
     return {
         setName,
         getName,
@@ -102,6 +111,8 @@ const toDoItem = () => {
         getChecklist,
         setNotes,
         getNotes,
+        setCompleted,
+        getCompleted,
     };
 };
 export default toDoItem;
