@@ -9,16 +9,36 @@ WebFont.load({
 const domToDoItem = (item) => {
     let toDoItem = item;
     let expanded = false;
-    let panel = document.createElement("div");
-    panel.classList.add("to-do-item");
+    let e = document.createElement("div");
+    e.classList.add("to-do-item");
 
     const draw = () => {
-        while (panel.firstChild) panel.lastChild.remove();
+        while (e.firstChild) e.lastChild.remove();
+
+        if (expanded) e.classList.add("expanded");
+        else e.classList.add("collapsed");
+
+        let expandCollapseButton = document.createElement("button");
+        expandCollapseButton.classList.add(
+            "to-do-item-expand-collapse-button",
+            "material-symbols-rounded"
+        );
+        if (expanded) expandCollapseButton.textContent = "Expand_Circle_Up";
+        else expandCollapseButton.textContent = "Expand_Circle_Down";
+        e.appendChild(expandCollapseButton);
+        expandCollapseButton.addEventListener("click", () => {
+            expanded = !expanded;
+            draw();
+        });
+
+        let topBarInformation = document.createElement("div");
+        topBarInformation.classList.add("to-do-item-top-bar-information");
+        e.appendChild(topBarInformation);
 
         let name = document.createElement("h2");
         name.classList.add("to-do-item-name", "no-select");
         name.textContent = toDoItem.getName();
-        panel.appendChild(name);
+        topBarInformation.appendChild(name);
 
         let dueDate = document.createElement("h4");
         dueDate.classList.add("to-do-item-due-date", "no-select");
@@ -46,7 +66,7 @@ const domToDoItem = (item) => {
             format: units.filter((i) => new Set(nonzero).has(i)).slice(0, 2),
             delimiter: ", ",
         })}`;
-        panel.appendChild(dueDate);
+        topBarInformation.appendChild(dueDate);
 
         let priority = document.createElement("div");
         priority.classList.add("to-do-item-priority");
@@ -54,7 +74,8 @@ const domToDoItem = (item) => {
             let priorityStar = document.createElement("h4");
             priorityStar.classList.add(
                 "to-do-item-priority-star",
-                "material-symbols-rounded"
+                "material-symbols-rounded",
+                "no-select"
             );
             priorityStar.textContent = "Star";
             if (i >= toDoItem.getPriority()) {
@@ -64,13 +85,16 @@ const domToDoItem = (item) => {
             }
             priority.appendChild(priorityStar);
         }
-        panel.appendChild(priority);
+        topBarInformation.appendChild(priority);
 
         if (expanded) {
+            let expandedInfo = document.createElement("div");
+            expandedInfo.classList.add("to-do-item-expanded-information");
+            e.appendChild(expandedInfo);
         }
     };
     draw();
 
-    return panel;
+    return e;
 };
 export default domToDoItem;
