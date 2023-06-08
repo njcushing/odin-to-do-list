@@ -119,6 +119,7 @@ body {
 .new-project-form > li {
     display: flex;
     justify-content: space-between;
+    flex-direction: row-reverse;
     gap: 10px;
 }
 .new-project-form > li > input[required]:valid {
@@ -135,9 +136,23 @@ body {
 }
 
 .new-project-form-name > label {
+    position: relative;
     font-size: 0.9rem;
     white-space: nowrap;
 }
+.new-project-form > li > label::before {
+    position: absolute;
+    font-size: 0.6rem;
+    white-space: nowrap;
+    color: transparent;
+    content: attr(help);
+    font-weight: normal;
+    top: 1.4rem;
+}
+.new-project-form-name > input:not(:placeholder-shown).name-taken + label::before {
+    color: red;
+}
+
 .new-project-form-name > input {
     font-size: 0.7rem;
     border-radius: 6px;

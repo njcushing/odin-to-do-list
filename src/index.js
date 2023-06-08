@@ -167,11 +167,6 @@ const displayController = (() => {
         const projectName = document.createElement("li");
         projectName.classList.add("new-project-form-name");
         newProjectForm.appendChild(projectName);
-        const projectNameLabel = document.createElement("label");
-        projectNameLabel.setAttribute("for", "project-name");
-        projectNameLabel.setAttribute("help", "This name is already taken.");
-        projectNameLabel.textContent = "Project Name";
-        projectName.appendChild(projectNameLabel);
         const projectNameInput = document.createElement("input");
         projectNameInput.setAttribute("type", "text");
         projectNameInput.setAttribute("name", "project-name");
@@ -184,7 +179,7 @@ const displayController = (() => {
         );
         projectNameInput.setAttribute("required", true);
         projectNameInput.setAttribute("placeholder", " ");
-        projectNameInput.setAttribute("pattern", "[A-Za-z0-9 _\\-]+");
+        projectNameInput.setAttribute("pattern", "[A-Za-z0-9 _\\-']+");
         projectNameInput.addEventListener("input", () => {
             const avail = checkNewProjectNameIsAvailable(
                 projectNameInput.value
@@ -194,6 +189,11 @@ const displayController = (() => {
             else projectNameInput.classList.add("name-taken");
         });
         projectName.appendChild(projectNameInput);
+        const projectNameLabel = document.createElement("label");
+        projectNameLabel.setAttribute("for", "project-name");
+        projectNameLabel.setAttribute("help", "This name is already taken.");
+        projectNameLabel.textContent = "Project Name";
+        projectName.appendChild(projectNameLabel);
 
         const createProjectButton = document.createElement("button");
         createProjectButton.classList.add(
