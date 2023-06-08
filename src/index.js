@@ -212,8 +212,11 @@ const displayController = (() => {
         const formData = Object.fromEntries(
             new FormData(form.target).entries()
         );
-        projects.newProject(formData["project-name"]);
-        refreshContent();
+        const avail = checkNewProjectNameIsAvailable(formData["project-name"]);
+        if (avail) {
+            projects.newProject(formData["project-name"]);
+            refreshContent();
+        }
     };
     const checkNewProjectNameIsAvailable = (name) => {
         const projectList = projects.getProjects();
