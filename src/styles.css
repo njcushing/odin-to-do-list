@@ -70,7 +70,7 @@ body {
     left: 0px;
     width: 100vw;
     height: 100vh;
-    background-color: rgba(128, 128, 128, 0.3);
+    background-color: rgba(0, 0, 0, 0.6);
 }
 
 .new-project-form {
@@ -121,7 +121,9 @@ body {
     justify-content: space-between;
     gap: 10px;
 }
-.new-project-form > li > input[required]:focus:invalid {
+.new-project-form > li > input[required]:focus:invalid,
+.new-project-form > li > input[required]:not(:placeholder-shown):invalid,
+.new-project-form-name > input > input.name-taken {
     outline-color: red;
     background-color: rgba(255, 106, 106, 0.18);
     border-color: red;

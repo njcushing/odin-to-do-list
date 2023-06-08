@@ -206,6 +206,7 @@ const displayController = (() => {
 
         const newProjectForm = document.createElement("form");
         newProjectForm.classList.add("new-project-form");
+        newProjectForm.addEventListener("submit", submitNewProjectForm);
         newProjectFormCover.appendChild(newProjectForm);
 
         const closeButton = document.createElement("button");
@@ -222,18 +223,25 @@ const displayController = (() => {
         newProjectForm.appendChild(projectName);
         const projectNameLabel = document.createElement("label");
         projectNameLabel.setAttribute("for", "project-name");
+        projectNameLabel.setAttribute("help", "This name is already taken.");
         projectNameLabel.textContent = "Project Name";
         projectName.appendChild(projectNameLabel);
         const projectNameInput = document.createElement("input");
         projectNameInput.setAttribute("type", "text");
+        projectNameInput.setAttribute("name", "project-name");
         projectNameInput.setAttribute("id", "project-name");
         projectNameInput.setAttribute("minlength", 1);
         projectNameInput.setAttribute("maxlength", 75);
         projectNameInput.setAttribute(
             "title",
-            "Please enter a name for your project."
+            "Please enter a name for your project using only alphanumeric characters, hyphens, underscores and spaces."
         );
         projectNameInput.setAttribute("required", true);
+        projectNameInput.setAttribute("placeholder", " ");
+        projectNameInput.setAttribute("pattern", "[A-Za-z0-9 _\\-]+");
+        projectNameInput.addEventListener("input", () => {
+            checkNewProjectNameIsAvailable(projectNameInput);
+        });
         projectName.appendChild(projectNameInput);
 
         const createProjectButton = document.createElement("button");
@@ -241,19 +249,29 @@ const displayController = (() => {
             "new-project-form-create-project-button",
             "material-symbols-rounded"
         );
-        createProjectButton.setAttribute("type", "button");
+        createProjectButton.setAttribute("type", "submit");
         createProjectButton.textContent = "Done";
-        createProjectButton.addEventListener("click", () => {
-            submitNewProjectForm(newProjectForm);
-        });
         newProjectForm.appendChild(createProjectButton);
     };
     const closeNewProjectForm = () => {
         if (newProjectFormCover) newProjectFormCover.remove();
     };
-    const submitNewProjectForm = (e) => {
-        const formData = Object.fromEntries(new FormData(e).entries());
+    const submitNewProjectForm = (form) => {
+        form.preventDefault();
+        const formData = Object.fromEntries(
+            new FormData(form.target).entries()
+        );
         console.log(formData);
+    };
+    const checkNewProjectNameIsAvailable = (name) => {
+        const projectList = projects.getProjects();
+        projectList.forEach((project) => {
+            if (project.name === name.value) {
+                name.classList.add("name-taken");
+                return;
+            }
+            name.classList.remove("name-taken");
+        });
     };
 
     refreshContent();
