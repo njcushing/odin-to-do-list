@@ -121,17 +121,17 @@ body {
     justify-content: space-between;
     gap: 10px;
 }
-.new-project-form > li > input[required]:focus:invalid,
-.new-project-form > li > input[required]:not(:placeholder-shown):invalid,
-.new-project-form-name > input > input.name-taken {
-    outline-color: red;
-    background-color: rgba(255, 106, 106, 0.18);
-    border-color: red;
-}
 .new-project-form > li > input[required]:valid {
     outline-color: rgb(31, 187, 0);
     background-color: rgba(123, 255, 106, 0.18);
     border-color: rgb(31, 187, 0);
+}
+.new-project-form > li > input[required]:focus:invalid,
+.new-project-form > li > input[required]:not(:placeholder-shown):invalid,
+.new-project-form > li > input[required].name-taken {
+    outline-color: red;
+    background-color: rgba(255, 106, 106, 0.18);
+    border-color: red;
 }
 
 .new-project-form-name > label {

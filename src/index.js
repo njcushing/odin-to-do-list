@@ -39,12 +39,12 @@ const displayController = (() => {
         let projectList = [];
 
         const newProject = (n) => {
-            projectList.forEach((project) => {
-                if (project.name === n) {
-                    alert("This project name is already taken.");
+            for (let i = 0; i < projectList.length; i++) {
+                if (projectList[i].name === n) {
+                    console.log("This project name is already taken.");
                     return null;
                 }
-            });
+            }
             const newProject = toDoProject(n);
             projectList.push({
                 name: n,
@@ -145,6 +145,86 @@ const displayController = (() => {
         newProjectPanel.appendChild(newProjectPlus);
     };
 
+    const displayNewProjectForm = () => {
+        newProjectFormCover = document.createElement("div");
+        newProjectFormCover.classList.add("new-project-form-cover");
+        content.appendChild(newProjectFormCover);
+
+        const newProjectForm = document.createElement("form");
+        newProjectForm.classList.add("new-project-form");
+        newProjectForm.addEventListener("submit", submitNewProjectForm);
+        newProjectFormCover.appendChild(newProjectForm);
+
+        const closeButton = document.createElement("button");
+        closeButton.classList.add(
+            "new-project-form-close-button",
+            "material-symbols-rounded"
+        );
+        closeButton.textContent = "Close";
+        closeButton.addEventListener("click", closeNewProjectForm);
+        newProjectForm.appendChild(closeButton);
+
+        const projectName = document.createElement("li");
+        projectName.classList.add("new-project-form-name");
+        newProjectForm.appendChild(projectName);
+        const projectNameLabel = document.createElement("label");
+        projectNameLabel.setAttribute("for", "project-name");
+        projectNameLabel.setAttribute("help", "This name is already taken.");
+        projectNameLabel.textContent = "Project Name";
+        projectName.appendChild(projectNameLabel);
+        const projectNameInput = document.createElement("input");
+        projectNameInput.setAttribute("type", "text");
+        projectNameInput.setAttribute("name", "project-name");
+        projectNameInput.setAttribute("id", "project-name");
+        projectNameInput.setAttribute("minlength", 1);
+        projectNameInput.setAttribute("maxlength", 75);
+        projectNameInput.setAttribute(
+            "title",
+            "Please enter a name for your project using only alphanumeric characters, hyphens, underscores and spaces."
+        );
+        projectNameInput.setAttribute("required", true);
+        projectNameInput.setAttribute("placeholder", " ");
+        projectNameInput.setAttribute("pattern", "[A-Za-z0-9 _\\-]+");
+        projectNameInput.addEventListener("input", () => {
+            const avail = checkNewProjectNameIsAvailable(
+                projectNameInput.value
+            );
+            console.log(avail);
+            if (avail) projectNameInput.classList.remove("name-taken");
+            else projectNameInput.classList.add("name-taken");
+        });
+        projectName.appendChild(projectNameInput);
+
+        const createProjectButton = document.createElement("button");
+        createProjectButton.classList.add(
+            "new-project-form-create-project-button",
+            "material-symbols-rounded"
+        );
+        createProjectButton.setAttribute("type", "submit");
+        createProjectButton.textContent = "Done";
+        newProjectForm.appendChild(createProjectButton);
+    };
+    const closeNewProjectForm = () => {
+        if (newProjectFormCover) newProjectFormCover.remove();
+    };
+    const submitNewProjectForm = (form) => {
+        form.preventDefault();
+        const formData = Object.fromEntries(
+            new FormData(form.target).entries()
+        );
+        projects.newProject(formData["project-name"]);
+        refreshContent();
+    };
+    const checkNewProjectNameIsAvailable = (name) => {
+        const projectList = projects.getProjects();
+        for (let i = 0; i < projectList.length; i++) {
+            if (projectList[i].name === name) {
+                return false;
+            }
+        }
+        return true;
+    };
+
     const displayProject = () => {
         const project = projects.getProjects()[currentProject];
         const toDoItems = project.project.getToDoItems();
@@ -196,81 +276,6 @@ const displayController = (() => {
 
         toDoItems.forEach((item) => {
             toDoItemsContainer.appendChild(domToDoItem(item));
-        });
-    };
-
-    const displayNewProjectForm = () => {
-        newProjectFormCover = document.createElement("div");
-        newProjectFormCover.classList.add("new-project-form-cover");
-        content.appendChild(newProjectFormCover);
-
-        const newProjectForm = document.createElement("form");
-        newProjectForm.classList.add("new-project-form");
-        newProjectForm.addEventListener("submit", submitNewProjectForm);
-        newProjectFormCover.appendChild(newProjectForm);
-
-        const closeButton = document.createElement("button");
-        closeButton.classList.add(
-            "new-project-form-close-button",
-            "material-symbols-rounded"
-        );
-        closeButton.textContent = "Close";
-        closeButton.addEventListener("click", closeNewProjectForm);
-        newProjectForm.appendChild(closeButton);
-
-        const projectName = document.createElement("li");
-        projectName.classList.add("new-project-form-name");
-        newProjectForm.appendChild(projectName);
-        const projectNameLabel = document.createElement("label");
-        projectNameLabel.setAttribute("for", "project-name");
-        projectNameLabel.setAttribute("help", "This name is already taken.");
-        projectNameLabel.textContent = "Project Name";
-        projectName.appendChild(projectNameLabel);
-        const projectNameInput = document.createElement("input");
-        projectNameInput.setAttribute("type", "text");
-        projectNameInput.setAttribute("name", "project-name");
-        projectNameInput.setAttribute("id", "project-name");
-        projectNameInput.setAttribute("minlength", 1);
-        projectNameInput.setAttribute("maxlength", 75);
-        projectNameInput.setAttribute(
-            "title",
-            "Please enter a name for your project using only alphanumeric characters, hyphens, underscores and spaces."
-        );
-        projectNameInput.setAttribute("required", true);
-        projectNameInput.setAttribute("placeholder", " ");
-        projectNameInput.setAttribute("pattern", "[A-Za-z0-9 _\\-]+");
-        projectNameInput.addEventListener("input", () => {
-            checkNewProjectNameIsAvailable(projectNameInput);
-        });
-        projectName.appendChild(projectNameInput);
-
-        const createProjectButton = document.createElement("button");
-        createProjectButton.classList.add(
-            "new-project-form-create-project-button",
-            "material-symbols-rounded"
-        );
-        createProjectButton.setAttribute("type", "submit");
-        createProjectButton.textContent = "Done";
-        newProjectForm.appendChild(createProjectButton);
-    };
-    const closeNewProjectForm = () => {
-        if (newProjectFormCover) newProjectFormCover.remove();
-    };
-    const submitNewProjectForm = (form) => {
-        form.preventDefault();
-        const formData = Object.fromEntries(
-            new FormData(form.target).entries()
-        );
-        console.log(formData);
-    };
-    const checkNewProjectNameIsAvailable = (name) => {
-        const projectList = projects.getProjects();
-        projectList.forEach((project) => {
-            if (project.name === name.value) {
-                name.classList.add("name-taken");
-                return;
-            }
-            name.classList.remove("name-taken");
         });
     };
 
