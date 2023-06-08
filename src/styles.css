@@ -76,27 +76,70 @@ body {
 .new-project-form {
     display: grid;
     grid-template-rows: auto;
-    grid-template-columns: minmax(300px, 450px);
     border-radius: 1.2rem;
     background-color: #fff;
     padding: 14px;
+    gap: 10px;
 }
 
-.new-project-form-close-button {
-    justify-self: end;
+.new-project-form-close-button,
+.new-project-form-create-project-button {
     width: 30px;
     height: 30px;
     border: none;
     border-radius: 9999px;
     color: white;
-    background-color: #e73333;
     text-align: center;
     font-size: 1rem;
     padding: 0px;
+}
+.new-project-form-close-button {
+    justify-self: end;
+    background-color: #e73333;
+    margin-bottom: 1rem;
 }
 .new-project-form-close-button:hover {
     background-color: #f54e4e;
 }
 .new-project-form-close-button:active {
     background-color: #c51717;
+}
+.new-project-form-create-project-button {
+    justify-self: center;
+    background-color: #31c22c;
+    margin-top: 1rem;
+}
+.new-project-form-create-project-button:hover {
+    background-color: #4bdb46;
+}
+.new-project-form-create-project-button:active {
+    background-color: #23aa1f;
+}
+
+.new-project-form > li {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+}
+.new-project-form > li > input[required]:focus:invalid {
+    outline-color: red;
+    background-color: rgba(255, 106, 106, 0.18);
+    border-color: red;
+}
+.new-project-form > li > input[required]:valid {
+    outline-color: rgb(31, 187, 0);
+    background-color: rgba(123, 255, 106, 0.18);
+    border-color: rgb(31, 187, 0);
+}
+
+.new-project-form-name > label {
+    font-size: 0.9rem;
+    white-space: nowrap;
+}
+.new-project-form-name > input {
+    font-size: 0.7rem;
+    border-radius: 6px;
+    border: 1px solid #000;
+    min-width: 80px;
+    width: 320px;
 }
