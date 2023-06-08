@@ -7,7 +7,7 @@ import projectTabStyles from "./styles/styles-tab-project.lazy.css";
 import WebFont from "webfontloader";
 WebFont.load({
     google: {
-        families: ["Material+Symbols+Rounded:opsz,wght,FILL,GRAD@48,400,1,0"],
+        families: ["Material+Symbols+Rounded:opsz,wght,FILL,GRAD@48,400,0,0"],
     },
 });
 
@@ -16,7 +16,8 @@ const displayController = (() => {
     let header;
     let title;
     let content;
-    let currentProject = 0;
+    let newProjectFormCover;
+    let currentProject = -1;
 
     const createPage = (() => {
         page = document.createElement("div");
@@ -89,6 +90,7 @@ const displayController = (() => {
     const refreshContent = () => {
         if (!content) return;
         while (content.firstChild) content.lastChild.remove();
+        closeNewProjectForm();
         projectListTabStyles.unuse();
         projectTabStyles.unuse();
         title.textContent = "My Projects";
@@ -130,6 +132,7 @@ const displayController = (() => {
         let newProjectPanel = document.createElement("div");
         newProjectPanel.classList.add("new-project-panel");
         projectContainer.appendChild(newProjectPanel);
+        newProjectPanel.addEventListener("click", displayNewProjectForm);
 
         let newProjectName = document.createElement("h2");
         newProjectName.classList.add("new-project-panel-name", "no-select");
@@ -194,6 +197,28 @@ const displayController = (() => {
         toDoItems.forEach((item) => {
             toDoItemsContainer.appendChild(domToDoItem(item));
         });
+    };
+
+    const displayNewProjectForm = () => {
+        newProjectFormCover = document.createElement("div");
+        newProjectFormCover.classList.add("new-project-form-cover");
+        content.appendChild(newProjectFormCover);
+
+        const newProjectForm = document.createElement("div");
+        newProjectForm.classList.add("new-project-form");
+        newProjectFormCover.appendChild(newProjectForm);
+
+        const closeButton = document.createElement("button");
+        closeButton.classList.add(
+            "new-project-form-close-button",
+            "material-symbols-rounded"
+        );
+        closeButton.textContent = "Close";
+        closeButton.addEventListener("click", closeNewProjectForm);
+        newProjectForm.appendChild(closeButton);
+    };
+    const closeNewProjectForm = () => {
+        if (newProjectFormCover) newProjectFormCover.remove();
     };
 
     refreshContent();

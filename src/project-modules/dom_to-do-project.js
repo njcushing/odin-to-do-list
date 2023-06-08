@@ -2,7 +2,7 @@ import { format } from "date-fns";
 import WebFont from "webfontloader";
 WebFont.load({
     google: {
-        families: ["Material+Symbols+Rounded:opsz,wght,FILL,GRAD@48,400,1,0"],
+        families: ["Material+Symbols+Rounded:opsz,wght,FILL,GRAD@48,400,0,0"],
     },
 });
 

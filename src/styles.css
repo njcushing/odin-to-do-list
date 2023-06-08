@@ -44,8 +44,10 @@ body {
 
 .header {
     grid-area: 1 / 1 / 2 / -1;
-    background-color: rgb(226, 226, 226);
+    background-color: #ffffff;
     padding: 30px 10px;
+    box-shadow: 0px 4px 5px -0px rgba(128, 128, 128, 0.3);
+    z-index: 0;
 }
 .header > .title {
     text-align: center;
@@ -57,4 +59,44 @@ body {
 .content {
     grid-area: 2 / 1 / -1 / -1;
     padding: 20px;
+    background-color: #e4e4e4;
+}
+
+.new-project-form-cover {
+    display: grid;
+    place-content: center;
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(128, 128, 128, 0.3);
+}
+
+.new-project-form {
+    display: grid;
+    grid-template-rows: auto;
+    grid-template-columns: minmax(300px, 450px);
+    border-radius: 1.2rem;
+    background-color: #fff;
+    padding: 14px;
+}
+
+.new-project-form-close-button {
+    justify-self: end;
+    width: 30px;
+    height: 30px;
+    border: none;
+    border-radius: 9999px;
+    color: white;
+    background-color: #e73333;
+    text-align: center;
+    font-size: 1rem;
+    padding: 0px;
+}
+.new-project-form-close-button:hover {
+    background-color: #f54e4e;
+}
+.new-project-form-close-button:active {
+    background-color: #c51717;
 }
