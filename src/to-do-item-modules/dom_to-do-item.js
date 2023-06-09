@@ -38,11 +38,7 @@ const domToDoItem = (item) => {
         topBarInformation.classList.add("to-do-item-top-bar-information");
         e.appendChild(topBarInformation);
 
-        drawName();
-
-        drawDueDate();
-
-        drawPriority();
+        drawTopBarInformation();
 
         if (expanded) {
             drawDeleteButton();
@@ -69,7 +65,7 @@ const domToDoItem = (item) => {
         });
     };
 
-    const drawName = () => {
+    const drawTopBarInformation = () => {
         if (name) name.remove();
         name = document.createElement("input");
         name.classList.add("to-do-item-name");
@@ -81,53 +77,68 @@ const domToDoItem = (item) => {
         name.value = toDoItem.getName();
         name.addEventListener("input", () => toDoItem.setName(name.value));
         topBarInformation.appendChild(name);
-    };
 
-    const drawDueDate = () => {
         if (dueDate) dueDate.remove();
         dueDate = document.createElement("h4");
         dueDate.classList.add("to-do-item-due-date", "no-select");
-        let duration = intervalToDuration({
-            start: new Date(),
-            end: toDoItem.getDueDate(),
-        });
-        const units = [
-            "years",
-            "months",
-            "weeks",
-            "days",
-            "hours",
-            "minutes",
-            "seconds",
-        ];
-        const nonzero = Object.entries(duration)
-            .filter(([_, value]) => value || 0 > 0)
-            .map(([unit, _]) => unit);
-        const remainingTimeFormat = formatDuration(duration, {
-            format: units.filter((i) => new Set(nonzero).has(i)).slice(0, 2),
-            delimiter: ", ",
-        });
-        let remainingTimeString = ``;
-        if (toDoItem.getDueDate() > new Date()) {
-            if (remainingTimeFormat.length === 0) {
-                remainingTimeString = ` right now`;
+        const updateDueDateString = () => {
+            let duration = intervalToDuration({
+                start: new Date(),
+                end: toDoItem.getDueDate(),
+            });
+            const units = [
+                "years",
+                "months",
+                "weeks",
+                "days",
+                "hours",
+                "minutes",
+                "seconds",
+            ];
+            const nonzero = Object.entries(duration)
+                .filter(([_, value]) => value || 0 > 0)
+                .map(([unit, _]) => unit);
+            const remainingTimeFormat = formatDuration(duration, {
+                format: units
+                    .filter((i) => new Set(nonzero).has(i))
+                    .slice(0, 2),
+                delimiter: ", ",
+            });
+            let remainingTimeString = ``;
+            if (toDoItem.getDueDate() > new Date()) {
+                if (remainingTimeFormat.length === 0) {
+                    remainingTimeString = ` right now`;
+                } else {
+                    remainingTimeString = ` in ${remainingTimeFormat}`;
+                }
+                dueDate.textContent =
+                    `Due on ${format(toDoItem.getDueDate(), "do MMMM yyyy")}` +
+                    remainingTimeString;
             } else {
-                remainingTimeString = ` in ${remainingTimeFormat}`;
+                topBarInformation.classList.add("overdue");
+                if (remainingTimeFormat.length > 0) {
+                    remainingTimeString = ` for ${remainingTimeFormat}`;
+                }
+                dueDate.textContent = `Overdue` + remainingTimeString;
             }
-            dueDate.textContent =
-                `Due on ${format(toDoItem.getDueDate(), "do MMMM yyyy")}` +
-                remainingTimeString;
-        } else {
-            topBarInformation.classList.add("overdue");
-            if (remainingTimeFormat.length > 0) {
-                remainingTimeString = ` for ${remainingTimeFormat}`;
-            }
-            dueDate.textContent = `Overdue` + remainingTimeString;
-        }
+        };
+        updateDueDateString();
         topBarInformation.appendChild(dueDate);
-    };
 
-    const drawPriority = () => {
+        let datePicker = document.createElement("input");
+        datePicker.classList.add("to-do-item-due-date-picker");
+        datePicker.setAttribute("type", "datetime-local");
+        datePicker.value = toDoItem.getDueDate().toISOString().slice(0, 16);
+        datePicker.addEventListener("input", () => {
+            toDoItem.setDueDateYear(parseInt(datePicker.value.slice(0, 4)));
+            toDoItem.setDueDateMonth(parseInt(datePicker.value.slice(5, 7)));
+            toDoItem.setDueDateDay(parseInt(datePicker.value.slice(8, 10)));
+            toDoItem.setDueDateHour(parseInt(datePicker.value.slice(11, 13)));
+            toDoItem.setDueDateMinute(parseInt(datePicker.value.slice(14, 16)));
+            updateDueDateString();
+        });
+        topBarInformation.appendChild(datePicker);
+
         if (priority) priority.remove();
         priority = document.createElement("div");
         priority.classList.add("to-do-item-priority");

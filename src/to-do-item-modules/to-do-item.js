@@ -33,7 +33,6 @@ const toDoItem = () => {
     const setDueDateYear = (x) => {
         if (typeof x !== "number") return;
         const getYear = new Date();
-        x = clampNumber(x, getYear.getFullYear(), getYear.getFullYear() + 100);
         dueDate.setFullYear(Math.floor(x));
     };
     const setDueDateMonth = (x) => {
