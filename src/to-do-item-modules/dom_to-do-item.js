@@ -89,16 +89,22 @@ const domToDoItem = (item) => {
             format: units.filter((i) => new Set(nonzero).has(i)).slice(0, 2),
             delimiter: ", ",
         });
+        let remainingTimeString = ``;
         if (toDoItem.getDueDate() > new Date()) {
-            dueDate.textContent = `Due on ${format(
-                toDoItem.getDueDate(),
-                "do MMMM yyyy"
-            )} in 
-            ${remainingTimeFormat}`;
+            if (remainingTimeFormat.length === 0) {
+                remainingTimeString = ` right now`;
+            } else {
+                remainingTimeString = ` in ${remainingTimeFormat}`;
+            }
+            dueDate.textContent =
+                `Due on ${format(toDoItem.getDueDate(), "do MMMM yyyy")}` +
+                remainingTimeString;
         } else {
             topBarInformation.classList.add("overdue");
-            dueDate.textContent = `Overdue by
-            ${remainingTimeFormat}`;
+            if (remainingTimeFormat.length > 0) {
+                remainingTimeString = ` for ${remainingTimeFormat}`;
+            }
+            dueDate.textContent = `Overdue` + remainingTimeString;
         }
         topBarInformation.appendChild(dueDate);
     };
