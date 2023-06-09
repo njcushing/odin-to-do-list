@@ -4,12 +4,6 @@ import domToDoProject from "./project-modules/dom_to-do-project.js";
 import domToDoItem from "./to-do-item-modules/dom_to-do-item.js";
 import projectListTabStyles from "./styles/styles-tab-projectlist.lazy.css";
 import projectTabStyles from "./styles/styles-tab-project.lazy.css";
-import WebFont from "webfontloader";
-WebFont.load({
-    google: {
-        families: ["Material+Symbols+Rounded:opsz,wght,FILL,GRAD@48,400,0,0"],
-    },
-});
 
 const displayController = (() => {
     let page;

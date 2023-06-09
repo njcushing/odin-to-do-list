@@ -1,10 +1,4 @@
 import { format, formatDuration, intervalToDuration } from "date-fns";
-import WebFont from "webfontloader";
-WebFont.load({
-    google: {
-        families: ["Material+Symbols+Rounded:opsz,wght,FILL,GRAD@48,400,1,0"],
-    },
-});
 
 const domToDoItem = (item) => {
     let toDoItem = item;
@@ -74,7 +68,7 @@ const domToDoItem = (item) => {
             let priorityStar = document.createElement("h4");
             priorityStar.classList.add(
                 "to-do-item-priority-star",
-                "material-symbols-rounded",
+                "material-symbols-sharp",
                 "no-select"
             );
             priorityStar.textContent = "Star";

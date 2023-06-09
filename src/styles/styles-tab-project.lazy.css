@@ -41,11 +41,11 @@
 }
 .project-buttons-sort-to-do-items:hover {
     color: rgb(236, 236, 236);
-    background-color: #d3b221;
+    background-color: #ecc825;
     box-shadow: 0px 4px 5px -0px rgba(128, 128, 128, 0.3);
 }
 .project-buttons-sort-to-do-items:active {
-    background-color: #bb9c13;
+    background-color: #d1af15;
 }
 
 .project-to-do-items-container {
@@ -126,12 +126,8 @@
     flex-wrap: nowrap;
 }
 .to-do-item-priority-star {
-    /*  Annoyingly, have to use negative margin here to get stars to align.
-        This causes an overlap zone where the cursor will not highlight the left-most
-        star until it is a certain distance over the right-hand side of the star icon. */
     color: rgb(70, 70, 70);
-    font-size: 1.2rem;
-    margin: 0rem -0.2rem;
+    font-size: 1.0rem;
 }
 /* Using sibling selectors to access all 5 priority stars */
 .to-do-item-priority:not(:hover) .to-do-item-priority-star-on,
