@@ -116,11 +116,26 @@
 
 .to-do-item-name {
     justify-self: start;
+    font-family: var(--nunito-font-family);
     font-size: 1.2rem;
     color: rgb(50, 50, 50);
+    background-color: transparent;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    border: none;
+    border-radius: 0.2rem;
+    width: 100%;
+    height: 1.7rem;
+}
+.to-do-item-name:hover {
+    outline: 1px solid rgb(128, 128, 128);
+}
+.to-do-item-name:focus {
+    outline: 2px solid rgb(70, 70, 70);
+}
+.to-do-item-name:placeholder-shown {
+    font-size: 0.9rem;
 }
 
 .to-do-item-due-date {

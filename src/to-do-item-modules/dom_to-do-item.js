@@ -71,9 +71,15 @@ const domToDoItem = (item) => {
 
     const drawName = () => {
         if (name) name.remove();
-        name = document.createElement("h2");
-        name.classList.add("to-do-item-name", "no-select");
-        name.textContent = toDoItem.getName();
+        name = document.createElement("input");
+        name.classList.add("to-do-item-name");
+        name.setAttribute("type", "text");
+        name.setAttribute("minlength", 1);
+        name.setAttribute("maxlength", 75);
+        name.setAttribute("title", "Please enter a name for your to-do item.");
+        name.setAttribute("placeholder", "Please Enter a Name");
+        name.value = toDoItem.getName();
+        name.addEventListener("input", () => toDoItem.setName(name.value));
         topBarInformation.appendChild(name);
     };
 
