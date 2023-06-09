@@ -1,6 +1,7 @@
 import "./styles.css";
 import toDoProject from "./project-modules/to-do-project.js";
 import domToDoProject from "./project-modules/dom_to-do-project.js";
+import toDoItem from "./to-do-item-modules/to-do-item.js";
 import domToDoItem from "./to-do-item-modules/dom_to-do-item.js";
 import projectListTabStyles from "./styles/styles-tab-projectlist.lazy.css";
 import projectTabStyles from "./styles/styles-tab-project.lazy.css";
@@ -258,14 +259,13 @@ const displayController = (() => {
         );
         newToDoItemButton.textContent = "Add";
         newToDoItemButton.addEventListener("click", () => {
-            if (!newItemBeingCreated) {
-                newItemBeingCreated = true;
-                let newItem = project.project.addToDoItem();
-                toDoItemsContainer.insertBefore(
-                    domToDoItem(newItem),
-                    toDoItemsContainer.childNodes[0]
-                );
-            }
+            let newItem = toDoItem();
+            let newItemElement = domToDoItem(newItem);
+            toDoItemsContainer.insertBefore(
+                newItemElement,
+                toDoItemsContainer.childNodes[0]
+            );
+            newItemElement.classList.add("newly-created-item");
         });
         buttons.appendChild(newToDoItemButton);
 

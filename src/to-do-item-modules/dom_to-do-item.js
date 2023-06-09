@@ -12,7 +12,7 @@ const domToDoItem = (item) => {
     let name;
     let dueDate;
     let priority;
-    let editButton;
+    let deleteButton;
 
     const draw = () => {
         while (e.firstChild) e.lastChild.remove();
@@ -32,7 +32,7 @@ const domToDoItem = (item) => {
 
         drawPriority();
 
-        drawEditButton();
+        drawDeleteButton();
 
         if (expanded) {
             let expandedInfo = document.createElement("div");
@@ -137,15 +137,15 @@ const domToDoItem = (item) => {
         topBarInformation.appendChild(priority);
     };
 
-    const drawEditButton = () => {
-        if (editButton) editButton.remove();
-        editButton = document.createElement("button");
-        editButton.classList.add(
-            "to-do-item-edit-button",
+    const drawDeleteButton = () => {
+        if (deleteButton) deleteButton.remove();
+        deleteButton = document.createElement("button");
+        deleteButton.classList.add(
+            "to-do-item-delete-button",
             "material-symbols-rounded"
         );
-        editButton.textContent = "Edit";
-        e.appendChild(editButton);
+        deleteButton.textContent = "Delete";
+        e.appendChild(deleteButton);
     };
 
     draw();

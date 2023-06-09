@@ -10,6 +10,8 @@ const toDoItem = () => {
     let notes = "Empty";
     let completed = false;
 
+    dueDate.setDate(dueDate.getDate() + 1);
+
     const setName = (x) => {
         if (typeof x !== "string") return;
         if (x.length > 75) x = x.slice(0, 75);
