@@ -11,7 +11,7 @@ const displayController = (() => {
     let title;
     let content;
     let newProjectFormCover;
-    let currentProject = -1;
+    let currentProject = 0;
 
     const createPage = (() => {
         page = document.createElement("div");
@@ -225,6 +225,7 @@ const displayController = (() => {
     const displayProject = () => {
         const project = projects.getProjects()[currentProject];
         const toDoItems = project.project.getToDoItems();
+        let newItemBeingCreated = false;
 
         title.textContent = project.name;
 
@@ -256,6 +257,16 @@ const displayController = (() => {
             "no-select"
         );
         newToDoItemButton.textContent = "Add";
+        newToDoItemButton.addEventListener("click", () => {
+            if (!newItemBeingCreated) {
+                newItemBeingCreated = true;
+                let newItem = project.project.addToDoItem();
+                toDoItemsContainer.insertBefore(
+                    domToDoItem(newItem),
+                    toDoItemsContainer.childNodes[0]
+                );
+            }
+        });
         buttons.appendChild(newToDoItemButton);
 
         let sortToDoItemsButton = document.createElement("button");

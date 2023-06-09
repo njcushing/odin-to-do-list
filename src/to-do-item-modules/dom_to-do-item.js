@@ -85,14 +85,21 @@ const domToDoItem = (item) => {
         const nonzero = Object.entries(duration)
             .filter(([_, value]) => value || 0 > 0)
             .map(([unit, _]) => unit);
-        dueDate.textContent = `Due on ${format(
-            toDoItem.getDueDate(),
-            "do MMMM yyyy"
-        )} in 
-        ${formatDuration(duration, {
+        const remainingTimeFormat = formatDuration(duration, {
             format: units.filter((i) => new Set(nonzero).has(i)).slice(0, 2),
             delimiter: ", ",
-        })}`;
+        });
+        if (toDoItem.getDueDate() > new Date()) {
+            dueDate.textContent = `Due on ${format(
+                toDoItem.getDueDate(),
+                "do MMMM yyyy"
+            )} in 
+            ${remainingTimeFormat}`;
+        } else {
+            topBarInformation.classList.add("overdue");
+            dueDate.textContent = `Overdue by
+            ${remainingTimeFormat}`;
+        }
         topBarInformation.appendChild(dueDate);
     };
 

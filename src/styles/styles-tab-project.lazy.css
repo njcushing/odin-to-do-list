@@ -102,6 +102,9 @@
     padding: 0.0rem 0.4rem;
     gap: 10px;
 }
+.to-do-item-top-bar-information.overdue {
+    background-color: #f8d2d2;
+}
 
 .to-do-item-name {
     justify-self: start;

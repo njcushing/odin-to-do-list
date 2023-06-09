@@ -2,7 +2,7 @@ import { clampNumber, clampDayInMonth } from "./../useful.js";
 import checklistItem from "./item-checklist.js";
 
 const toDoItem = () => {
-    let name = "Default Name";
+    let name = "New Item";
     let description = "Empty";
     let dueDate = new Date();
     let priority = 0;
