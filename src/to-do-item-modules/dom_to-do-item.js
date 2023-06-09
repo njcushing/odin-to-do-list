@@ -3,6 +3,7 @@ import { format, formatDuration, intervalToDuration } from "date-fns";
 const domToDoItem = (item) => {
     let toDoItem = item;
     let expanded = false;
+    let deleteButtonFunction;
 
     let e = document.createElement("div");
     e.classList.add("to-do-item");
@@ -13,6 +14,17 @@ const domToDoItem = (item) => {
     let dueDate;
     let priority;
     let deleteButton;
+
+    const setExpanded = (x) => {
+        if (typeof x === "boolean") expanded = x;
+        draw();
+    };
+
+    const setDeleteButtonFunction = (f) => {
+        deleteButtonFunction = f;
+        if (deleteButton)
+            drawDeleteButton(); /* Reset element to clear existing eventListeners */
+    };
 
     const draw = () => {
         while (e.firstChild) e.lastChild.remove();
@@ -32,9 +44,9 @@ const domToDoItem = (item) => {
 
         drawPriority();
 
-        drawDeleteButton();
-
         if (expanded) {
+            drawDeleteButton();
+
             let expandedInfo = document.createElement("div");
             expandedInfo.classList.add("to-do-item-expanded-information");
             e.appendChild(expandedInfo);
@@ -145,11 +157,16 @@ const domToDoItem = (item) => {
             "material-symbols-rounded"
         );
         deleteButton.textContent = "Delete";
+        deleteButton.addEventListener("click", deleteButtonFunction);
         e.appendChild(deleteButton);
     };
 
     draw();
 
-    return e;
+    return {
+        e,
+        setExpanded,
+        setDeleteButtonFunction,
+    };
 };
 export default domToDoItem;

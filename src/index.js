@@ -262,10 +262,23 @@ const displayController = (() => {
             let newItem = toDoItem();
             let newItemElement = domToDoItem(newItem);
             toDoItemsContainer.insertBefore(
-                newItemElement,
+                newItemElement.e,
                 toDoItemsContainer.childNodes[0]
             );
-            newItemElement.classList.add("newly-created-item");
+            newItemElement.e.classList.add("newly-created-item");
+
+            newItemElement.setExpanded(true);
+            newItemElement.setDeleteButtonFunction(() => {
+                newItemElement.e.remove();
+            });
+
+            let confirmButton = document.createElement("button");
+            confirmButton.classList.add(
+                "to-do-item-confirm-button",
+                "material-symbols-rounded"
+            );
+            confirmButton.textContent = "Done";
+            newItemElement.e.appendChild(confirmButton);
         });
         buttons.appendChild(newToDoItemButton);
 
@@ -283,7 +296,11 @@ const displayController = (() => {
         toDoListContainer.appendChild(toDoItemsContainer);
 
         toDoItems.forEach((item) => {
-            toDoItemsContainer.appendChild(domToDoItem(item));
+            let newItemElement = domToDoItem(item);
+            newItemElement.setDeleteButtonFunction(() => {
+                console.log("test");
+            });
+            toDoItemsContainer.appendChild(newItemElement.e);
         });
     };
 
