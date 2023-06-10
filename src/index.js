@@ -267,8 +267,14 @@ const displayController = (() => {
             );
             newItemElement.e.classList.add("newly-created-item");
 
+            const refreshItem = () => newItemElement.refresh();
+
             newItemElement.setExpanded(true);
             newItemElement.setDeleteButtonFunction(() => {
+                refreshToDoItemsButton.removeEventListener(
+                    "click",
+                    refreshItem
+                );
                 newItemElement.e.remove();
             });
 
@@ -279,8 +285,18 @@ const displayController = (() => {
             );
             confirmButton.textContent = "Add";
             newItemElement.e.appendChild(confirmButton);
+            refreshToDoItemsButton.addEventListener("click", refreshItem);
         });
         buttons.appendChild(newToDoItemButton);
+
+        let refreshToDoItemsButton = document.createElement("button");
+        refreshToDoItemsButton.classList.add(
+            "project-buttons-refresh-to-do-items",
+            "material-symbols-rounded",
+            "no-select"
+        );
+        refreshToDoItemsButton.textContent = "Refresh";
+        buttons.appendChild(refreshToDoItemsButton);
 
         let sortToDoItemsButton = document.createElement("button");
         sortToDoItemsButton.classList.add(
@@ -297,8 +313,15 @@ const displayController = (() => {
 
         toDoItems.forEach((item) => {
             let newItemElement = domToDoItem(item);
+
+            const refreshItem = () => newItemElement.refresh();
+            refreshToDoItemsButton.addEventListener("click", refreshItem);
+
             newItemElement.setDeleteButtonFunction(() => {
-                console.log("test");
+                refreshToDoItemsButton.removeEventListener(
+                    "click",
+                    refreshItem
+                );
             });
             toDoItemsContainer.appendChild(newItemElement.e);
         });

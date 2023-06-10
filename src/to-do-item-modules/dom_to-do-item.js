@@ -215,12 +215,19 @@ const domToDoItem = (item) => {
         e.appendChild(deleteButton);
     };
 
+    const refresh = () => {
+        /* Avoid refreshing the main element container in here as it conflicts
+        with the 'confirm' button added to the element on instantiation */
+        drawDueDate();
+    };
+
     draw();
 
     return {
         e,
         setExpanded,
         setDeleteButtonFunction,
+        refresh,
     };
 };
 export default domToDoItem;
