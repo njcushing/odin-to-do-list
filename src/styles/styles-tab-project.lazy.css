@@ -61,20 +61,33 @@
     grid-template-columns: auto 1fr;
     gap: 0.4rem 0.4rem;
 }
+
+.overdue > .to-do-item-top-bar-information,
+.overdue > .to-do-item-expanded-information {
+    background-color: #f8d2d2;
+}
 .to-do-item.newly-created-item > .to-do-item-top-bar-information,
 .to-do-item.newly-created-item > .to-do-item-expanded-information {
     background-color: #e1f3c4;
+}
+.completed-item > .to-do-item-top-bar-information,
+.completed-item > .to-do-item-expanded-information {
+    background-color: #eeeeee;
 }
 
 .to-do-item-expand-collapse-button,
 .to-do-item-confirm-button {
     grid-area: 1 / 1 / 2 / 2;
 }
-.to-do-item-delete-button {
+.to-do-item-completed-item-button {
     grid-area: 2 / 1 / 3 / 2;
+}
+.to-do-item-delete-button {
+    grid-area: 3 / 1 / 4 / 2;
 }
 .to-do-item-expand-collapse-button,
 .to-do-item-confirm-button,
+.to-do-item-completed-item-button,
 .to-do-item-delete-button {
     font-size: 1.9rem;
     width: 2.4rem;
@@ -88,12 +101,14 @@
 }
 .to-do-item-expand-collapse-button:hover,
 .to-do-item-confirm-button:hover,
+.to-do-item-completed-item-button:hover,
 .to-do-item-delete-button:hover {
     color: rgb(146, 146, 146);
     background-color: #eeeeee;
 }
 .to-do-item-expand-collapse-button:active,
 .to-do-item-confirm-button:active,
+.to-do-item-completed-item-button:active,
 .to-do-item-delete-button:active {
     color: rgb(110, 110, 110);
     background-color: #cfcfcf;
@@ -109,9 +124,6 @@
     height: 2.4rem;
     padding: 0.0rem 0.4rem;
     gap: 10px;
-}
-.to-do-item-top-bar-information.overdue {
-    background-color: #f8d2d2;
 }
 
 .to-do-item-name {
@@ -142,6 +154,7 @@
     justify-self: end;
     text-align: right;
     font-size: 0.8rem;
+    font-weight: normal;
     color: rgb(70, 70, 70);
     white-space: nowrap;
 }
@@ -189,12 +202,12 @@
 .to-do-item-priority-star:hover + .to-do-item-priority-star + .to-do-item-priority-star,
 .to-do-item-priority-star:hover + .to-do-item-priority-star + .to-do-item-priority-star + .to-do-item-priority-star,
 .to-do-item-priority-star:hover + .to-do-item-priority-star + .to-do-item-priority-star + .to-do-item-priority-star + .to-do-item-priority-star {
-    color: gold;
+    color: rgb(255, 202, 56);
 }
 
 .to-do-item-expanded-information {
     margin-top: -0.4rem;
-    grid-area: 2 / 2 / -1 / -1;
+    grid-area: 2 / 2 / 5 / -1;
     height: 200px;
     background-color: #ffffff;
     box-shadow: 0px 4px 5px -0px rgba(128, 128, 128, 0.3);

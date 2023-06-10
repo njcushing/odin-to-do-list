@@ -12,7 +12,9 @@ const domToDoItem = (item) => {
     let topBarInformation;
     let name;
     let dueDate;
+    let datePicker;
     let priority;
+    let completedItemButton;
     let deleteButton;
 
     const setExpanded = (x) => {
@@ -38,9 +40,12 @@ const domToDoItem = (item) => {
         topBarInformation.classList.add("to-do-item-top-bar-information");
         e.appendChild(topBarInformation);
 
-        drawTopBarInformation();
+        drawName();
+        drawDueDate();
+        drawPriority();
 
         if (expanded) {
+            drawCompletedItemButton();
             drawDeleteButton();
 
             let expandedInfo = document.createElement("div");
@@ -65,7 +70,7 @@ const domToDoItem = (item) => {
         });
     };
 
-    const drawTopBarInformation = () => {
+    const drawName = () => {
         if (name) name.remove();
         name = document.createElement("input");
         name.classList.add("to-do-item-name");
@@ -77,11 +82,17 @@ const domToDoItem = (item) => {
         name.value = toDoItem.getName();
         name.addEventListener("input", () => toDoItem.setName(name.value));
         topBarInformation.appendChild(name);
+    };
 
+    const drawDueDate = () => {
         if (dueDate) dueDate.remove();
         dueDate = document.createElement("h4");
         dueDate.classList.add("to-do-item-due-date", "no-select");
         const updateDueDateString = () => {
+            if (toDoItem.getCompleted()) {
+                dueDate.textContent = "Completed";
+                return;
+            }
             let duration = intervalToDuration({
                 start: new Date(),
                 end: toDoItem.getDueDate(),
@@ -106,6 +117,7 @@ const domToDoItem = (item) => {
             });
             let remainingTimeString = ``;
             if (toDoItem.getDueDate() > new Date()) {
+                e.classList.remove("overdue");
                 if (remainingTimeFormat.length === 0) {
                     remainingTimeString = ` right now`;
                 } else {
@@ -115,7 +127,7 @@ const domToDoItem = (item) => {
                     `Due on ${format(toDoItem.getDueDate(), "do MMMM yyyy")}` +
                     remainingTimeString;
             } else {
-                topBarInformation.classList.add("overdue");
+                e.classList.add("overdue");
                 if (remainingTimeFormat.length > 0) {
                     remainingTimeString = ` for ${remainingTimeFormat}`;
                 }
@@ -125,7 +137,8 @@ const domToDoItem = (item) => {
         updateDueDateString();
         topBarInformation.appendChild(dueDate);
 
-        let datePicker = document.createElement("input");
+        if (datePicker) datePicker.remove();
+        datePicker = document.createElement("input");
         datePicker.classList.add("to-do-item-due-date-picker");
         datePicker.setAttribute("type", "datetime-local");
         datePicker.value = toDoItem.getDueDate().toISOString().slice(0, 16);
@@ -138,7 +151,9 @@ const domToDoItem = (item) => {
             updateDueDateString();
         });
         topBarInformation.appendChild(datePicker);
+    };
 
+    const drawPriority = () => {
         if (priority) priority.remove();
         priority = document.createElement("div");
         priority.classList.add("to-do-item-priority");
@@ -164,6 +179,28 @@ const domToDoItem = (item) => {
             }
         }
         topBarInformation.appendChild(priority);
+    };
+
+    const drawCompletedItemButton = () => {
+        if (completedItemButton) completedItemButton.remove();
+        if (toDoItem.getCompleted()) e.classList.add("completed-item");
+        completedItemButton = document.createElement("button");
+        completedItemButton.classList.add(
+            "to-do-item-completed-item-button",
+            "material-symbols-rounded"
+        );
+        completedItemButton.textContent = "Done";
+        completedItemButton.addEventListener("click", () => {
+            if (toDoItem.getCompleted()) {
+                toDoItem.setCompleted(false);
+                e.classList.remove("completed-item");
+            } else {
+                toDoItem.setCompleted(true);
+                e.classList.add("completed-item");
+            }
+            drawDueDate();
+        });
+        e.appendChild(completedItemButton);
     };
 
     const drawDeleteButton = () => {

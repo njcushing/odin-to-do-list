@@ -277,7 +277,7 @@ const displayController = (() => {
                 "to-do-item-confirm-button",
                 "material-symbols-rounded"
             );
-            confirmButton.textContent = "Done";
+            confirmButton.textContent = "Add";
             newItemElement.e.appendChild(confirmButton);
         });
         buttons.appendChild(newToDoItemButton);
