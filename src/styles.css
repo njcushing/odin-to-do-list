@@ -48,115 +48,11 @@ body {
     padding: 30px 10px;
     box-shadow: 0px 4px 5px -0px rgba(128, 128, 128, 0.3);
     z-index: 0;
-}
-.header > .title {
-    text-align: center;
-    font-size: 1.7rem;
-    font-weight: bold;
-    white-space: nowrap;
+    height: 2.8rem;
 }
 
 .content {
     grid-area: 2 / 1 / -1 / -1;
     padding: 20px;
     background-color: #e4e4e4;
-}
-
-.new-project-form-cover {
-    display: grid;
-    place-content: center;
-    position: fixed;
-    top: 0px;
-    left: 0px;
-    width: 100vw;
-    height: 100vh;
-    background-color: rgba(0, 0, 0, 0.6);
-}
-
-.new-project-form {
-    display: grid;
-    grid-template-rows: auto;
-    border-radius: 1.2rem;
-    background-color: #fff;
-    padding: 14px;
-    gap: 10px;
-}
-
-.new-project-form-close-button,
-.new-project-form-create-project-button {
-    width: 30px;
-    height: 30px;
-    border: none;
-    border-radius: 9999px;
-    color: white;
-    text-align: center;
-    font-size: 1rem;
-    padding: 0px;
-}
-.new-project-form-close-button {
-    justify-self: end;
-    background-color: #e73333;
-    margin-bottom: 1rem;
-}
-.new-project-form-close-button:hover {
-    background-color: #f54e4e;
-}
-.new-project-form-close-button:active {
-    background-color: #c51717;
-}
-.new-project-form-create-project-button {
-    justify-self: center;
-    background-color: #31c22c;
-    margin-top: 1rem;
-}
-.new-project-form-create-project-button:hover {
-    background-color: #4bdb46;
-}
-.new-project-form-create-project-button:active {
-    background-color: #23aa1f;
-}
-
-.new-project-form > li {
-    display: flex;
-    justify-content: space-between;
-    flex-direction: row-reverse;
-    gap: 10px;
-}
-.new-project-form > li > input[required]:valid {
-    outline-color: rgb(31, 187, 0);
-    background-color: rgba(123, 255, 106, 0.18);
-    border-color: rgb(31, 187, 0);
-}
-.new-project-form > li > input[required]:focus:invalid,
-.new-project-form > li > input[required]:not(:placeholder-shown):invalid,
-.new-project-form > li > input[required].name-taken {
-    outline-color: red;
-    background-color: rgba(255, 106, 106, 0.18);
-    border-color: red;
-}
-
-.new-project-form-name > label {
-    position: relative;
-    font-size: 0.9rem;
-    white-space: nowrap;
-}
-.new-project-form > li > label::before {
-    position: absolute;
-    font-size: 0.6rem;
-    white-space: nowrap;
-    color: transparent;
-    content: attr(help);
-    font-weight: normal;
-    top: 1.4rem;
-}
-.new-project-form-name > input:not(:placeholder-shown).name-taken + label::before {
-    color: red;
-}
-
-.new-project-form-name > input {
-    font-size: 0.7rem;
-    border-radius: 6px;
-    border: 1px solid #000;
-    min-width: 80px;
-    width: 320px;
 }

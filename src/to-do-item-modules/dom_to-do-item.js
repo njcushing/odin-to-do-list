@@ -10,6 +10,7 @@ const domToDoItem = (item) => {
 
     let expandCollapseButton;
     let topBarInformation;
+    let nameLabel;
     let name;
     let dueDate;
     let datePicker;
@@ -25,7 +26,7 @@ const domToDoItem = (item) => {
     const setDeleteButtonFunction = (f) => {
         deleteButtonFunction = f;
         if (deleteButton)
-            drawDeleteButton(); /* Reset element to clear existing eventListeners */
+            drawDeleteButton(); /* Resetting element here to clear existing eventListener(s) */
     };
 
     const draw = () => {
@@ -71,6 +72,17 @@ const domToDoItem = (item) => {
     };
 
     const drawName = () => {
+        /* Currently using implicit labelling here which isn't great for
+        accessibility - need a unique ID generator or something */
+        if (nameLabel) nameLabel.remove();
+        nameLabel = document.createElement("label");
+        nameLabel.classList.add(
+            "to-do-item-edit-name",
+            "material-symbols-rounded"
+        );
+        nameLabel.textContent = "Edit";
+        topBarInformation.appendChild(nameLabel);
+
         if (name) name.remove();
         name = document.createElement("input");
         name.classList.add("to-do-item-name");
@@ -81,7 +93,7 @@ const domToDoItem = (item) => {
         name.setAttribute("placeholder", "Please Enter a Name");
         name.value = toDoItem.getName();
         name.addEventListener("input", () => toDoItem.setName(name.value));
-        topBarInformation.appendChild(name);
+        nameLabel.appendChild(name);
     };
 
     const drawDueDate = () => {
@@ -216,8 +228,6 @@ const domToDoItem = (item) => {
     };
 
     const refresh = () => {
-        /* Avoid refreshing the main element container in here as it conflicts
-        with the 'confirm' button added to the element on instantiation */
         drawDueDate();
     };
 
