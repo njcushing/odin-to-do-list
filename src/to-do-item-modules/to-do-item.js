@@ -93,13 +93,22 @@ const toDoItem = () => {
         notes.splice(i, 1);
     };
 
-    const addChecklistItem = (n, s) => {
+    const newChecklistItem = (n, s) => {
         checklist.push(checklistItem());
         checklist[checklist.length - 1].setName(n);
         checklist[checklist.length - 1].setState(s);
     };
+    const setChecklistItem = (i, n, s) => {
+        if (typeof i !== "number" || i < 0 || i >= checklist.length) return;
+        checklist[i].setName(n);
+        checklist[i].setState(s);
+    };
     const getChecklist = () => {
         return checklist;
+    };
+    const removeChecklistItem = (i) => {
+        if (typeof i !== "number" || i < 0 || i >= checklist.length) return;
+        checklist.splice(i, 1);
     };
 
     const setCompleted = (x) => {
@@ -128,8 +137,10 @@ const toDoItem = () => {
         setNote,
         getNotes,
         removeNote,
-        addChecklistItem,
+        newChecklistItem,
+        setChecklistItem,
         getChecklist,
+        removeChecklistItem,
         setCompleted,
         getCompleted,
     };

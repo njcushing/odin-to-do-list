@@ -274,8 +274,6 @@ const domToDoItem = (item) => {
     };
 
     const drawNotes = () => {
-        let currentCount = 0;
-
         if (notes) notes.remove();
         notes = document.createElement("div");
         notes.classList.add("to-do-item-notes");
@@ -330,8 +328,6 @@ const domToDoItem = (item) => {
                 newNote.remove();
             });
             newNote.appendChild(newNoteDeleteButton);
-
-            currentCount++;
         };
 
         toDoItem.getNotes().forEach((text) => newNoteItem(text));
@@ -353,8 +349,108 @@ const domToDoItem = (item) => {
         if (checklist) checklist.remove();
         checklist = document.createElement("div");
         checklist.classList.add("to-do-item-checklist");
-
         expandedInfo.appendChild(checklist);
+
+        const checklistList = document.createElement("ul");
+        checklistList.classList.add("to-do-item-checklist-list");
+        checklist.appendChild(checklistList);
+
+        const newChecklistItem = (text = "", state = false) => {
+            const newChecklistItemContainer = document.createElement("li");
+            newChecklistItemContainer.classList.add(
+                "to-do-item-checklist-list-item"
+            );
+            checklistList.appendChild(newChecklistItemContainer);
+
+            const newChecklistItemCheckbox = document.createElement("input");
+            newChecklistItemCheckbox.classList.add(
+                "to-do-item-checklist-list-item-checkbox"
+            );
+            newChecklistItemCheckbox.setAttribute("type", "checkbox");
+            newChecklistItemCheckbox.checked = state;
+            newChecklistItemCheckbox.addEventListener("click", () => {
+                const index = Array.prototype.indexOf.call(
+                    checklistList.children,
+                    newChecklistItemContainer
+                );
+                toDoItem.setChecklistItem(
+                    index,
+                    newChecklistItemInput.value,
+                    newChecklistItemCheckbox.checked
+                );
+            });
+            newChecklistItemContainer.appendChild(newChecklistItemCheckbox);
+
+            const newChecklistItemInput = document.createElement("textarea");
+            newChecklistItemInput.classList.add(
+                "to-do-item-checklist-list-item-input"
+            );
+            newChecklistItemInput.setAttribute("placeholder", "New Item");
+            newChecklistItemInput.value = text;
+            newChecklistItemInput.addEventListener("input", () => {
+                const index = Array.prototype.indexOf.call(
+                    checklistList.children,
+                    newChecklistItemContainer
+                );
+                toDoItem.setChecklistItem(
+                    index,
+                    newChecklistItemInput.value,
+                    newChecklistItemCheckbox.checked
+                );
+                newChecklistItemInput.value = toDoItem
+                    .getChecklist()
+                    [index].getName();
+                newChecklistItemInput.style.height = 5 + "px";
+                newChecklistItemInput.style.height =
+                    newChecklistItemInput.scrollHeight + "px";
+            });
+            newChecklistItemContainer.appendChild(newChecklistItemInput);
+            newChecklistItemInput.style.height = "0px";
+            newChecklistItemInput.style.height =
+                newChecklistItemInput.scrollHeight + "px";
+            if (newChecklistItemInput.value === "") {
+                newChecklistItemInput.style.height = "0px";
+                newChecklistItemInput.value = "a";
+                newChecklistItemInput.style.height =
+                    newChecklistItemInput.scrollHeight + "px";
+                newChecklistItemInput.value = "";
+            }
+
+            const newChecklistItemDeleteButton =
+                document.createElement("button");
+            newChecklistItemDeleteButton.classList.add(
+                "to-do-item-checklist-list-item-delete-button",
+                "material-symbols-rounded"
+            );
+            newChecklistItemDeleteButton.textContent = "Delete";
+            newChecklistItemDeleteButton.addEventListener("click", () => {
+                const index = Array.prototype.indexOf.call(
+                    checklistList.children,
+                    newChecklistItemContainer
+                );
+                toDoItem.removeChecklistItem(index);
+                newChecklistItemContainer.remove();
+            });
+            newChecklistItemContainer.appendChild(newChecklistItemDeleteButton);
+        };
+
+        toDoItem
+            .getChecklist()
+            .forEach((item) =>
+                newChecklistItem(item.getName(), item.getState())
+            );
+
+        const newChecklistItemButton = document.createElement("button");
+        newChecklistItemButton.classList.add(
+            "to-do-item-checklist-new-checklist-item-button",
+            "material-symbols-rounded"
+        );
+        newChecklistItemButton.textContent = "Add";
+        newChecklistItemButton.addEventListener("click", () => {
+            toDoItem.newChecklistItem("", false);
+            newChecklistItem();
+        });
+        checklist.appendChild(newChecklistItemButton);
     };
 
     const refresh = () => {
