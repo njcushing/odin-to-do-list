@@ -242,8 +242,11 @@ const domToDoItem = (item) => {
         expandedInfo.appendChild(description);
 
         let descriptionLabel = document.createElement("label");
-        descriptionLabel.classList.add("to-do-item-description-label");
-        descriptionLabel.textContent = "Description";
+        descriptionLabel.classList.add(
+            "to-do-item-description-label",
+            "material-symbols-rounded"
+        );
+        descriptionLabel.textContent = "Edit";
         description.appendChild(descriptionLabel);
 
         let descriptionInput = document.createElement("textarea");
@@ -287,9 +290,8 @@ const domToDoItem = (item) => {
             newNote.classList.add("to-do-item-notes-list-item");
             noteList.appendChild(newNote);
 
-            const newNoteInput = document.createElement("input");
+            const newNoteInput = document.createElement("textarea");
             newNoteInput.classList.add("to-do-item-notes-list-item-input");
-            newNoteInput.setAttribute("type", "text");
             newNoteInput.setAttribute("placeholder", "New Item");
             newNoteInput.value = text;
             newNoteInput.addEventListener("input", () => {
@@ -298,8 +300,20 @@ const domToDoItem = (item) => {
                     newNote
                 );
                 toDoItem.setNote(index, newNoteInput.value);
+                newNoteInput.value = toDoItem.getNotes()[index];
+                newNoteInput.style.height = 5 + "px";
+                newNoteInput.style.height = newNoteInput.scrollHeight + "px";
             });
             newNote.appendChild(newNoteInput);
+            /* Funky stuff to correctly set initial text area sizing based on the content within it */
+            newNoteInput.style.height = "0px";
+            newNoteInput.style.height = newNoteInput.scrollHeight + "px";
+            if (newNoteInput.value === "") {
+                newNoteInput.style.height = "0px";
+                newNoteInput.value = "a";
+                newNoteInput.style.height = newNoteInput.scrollHeight + "px";
+                newNoteInput.value = "";
+            }
 
             const newNoteDeleteButton = document.createElement("button");
             newNoteDeleteButton.classList.add(
