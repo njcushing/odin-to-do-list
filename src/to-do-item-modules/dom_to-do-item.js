@@ -17,6 +17,10 @@ const domToDoItem = (item) => {
     let priority;
     let completedItemButton;
     let deleteButton;
+    let expandedInfo;
+    let description;
+    let notes;
+    let checklist;
 
     const setExpanded = (x) => {
         if (typeof x === "boolean") expanded = x;
@@ -49,9 +53,13 @@ const domToDoItem = (item) => {
             drawCompletedItemButton();
             drawDeleteButton();
 
-            let expandedInfo = document.createElement("div");
+            expandedInfo = document.createElement("div");
             expandedInfo.classList.add("to-do-item-expanded-information");
             e.appendChild(expandedInfo);
+
+            drawDescription();
+            drawNotes();
+            drawChecklist();
         }
     };
 
@@ -225,6 +233,114 @@ const domToDoItem = (item) => {
         deleteButton.textContent = "Delete";
         deleteButton.addEventListener("click", deleteButtonFunction);
         e.appendChild(deleteButton);
+    };
+
+    const drawDescription = () => {
+        if (description) description.remove();
+        description = document.createElement("div");
+        description.classList.add("to-do-item-description");
+        expandedInfo.appendChild(description);
+
+        let descriptionLabel = document.createElement("label");
+        descriptionLabel.classList.add("to-do-item-description-label");
+        descriptionLabel.textContent = "Description";
+        description.appendChild(descriptionLabel);
+
+        let descriptionInput = document.createElement("textarea");
+        descriptionInput.classList.add("to-do-item-description-input");
+        descriptionInput.setAttribute("placeholder", "No description.");
+        descriptionInput.value = toDoItem.getDescription();
+        descriptionInput.addEventListener("input", () => {
+            toDoItem.setDescription(descriptionInput.value);
+            descriptionInput.value = toDoItem.getDescription();
+            descriptionInput.style.height = 5 + "px";
+            descriptionInput.style.height =
+                descriptionInput.scrollHeight + "px";
+        });
+        descriptionLabel.appendChild(descriptionInput);
+        /* Funky stuff to correctly set initial text area sizing based on the content within it */
+        descriptionInput.style.height = "0px";
+        descriptionInput.style.height = descriptionInput.scrollHeight + "px";
+        if (descriptionInput.value === "") {
+            descriptionInput.style.height = "0px";
+            descriptionInput.value = "a";
+            descriptionInput.style.height =
+                descriptionInput.scrollHeight + "px";
+            descriptionInput.value = "";
+        }
+    };
+
+    const drawNotes = () => {
+        let currentCount = 0;
+
+        if (notes) notes.remove();
+        notes = document.createElement("div");
+        notes.classList.add("to-do-item-notes");
+        expandedInfo.appendChild(notes);
+
+        const noteList = document.createElement("ul");
+        noteList.classList.add("to-do-item-notes-list");
+        notes.appendChild(noteList);
+
+        const newNoteItem = (text = "") => {
+            const newNote = document.createElement("li");
+            newNote.classList.add("to-do-item-notes-list-item");
+            noteList.appendChild(newNote);
+
+            const newNoteInput = document.createElement("input");
+            newNoteInput.classList.add("to-do-item-notes-list-item-input");
+            newNoteInput.setAttribute("type", "text");
+            newNoteInput.setAttribute("placeholder", "New Item");
+            newNoteInput.value = text;
+            newNoteInput.addEventListener("input", () => {
+                const index = Array.prototype.indexOf.call(
+                    noteList.children,
+                    newNote
+                );
+                toDoItem.setNote(index, newNoteInput.value);
+            });
+            newNote.appendChild(newNoteInput);
+
+            const newNoteDeleteButton = document.createElement("button");
+            newNoteDeleteButton.classList.add(
+                "to-do-item-notes-list-item-delete-button",
+                "material-symbols-rounded"
+            );
+            newNoteDeleteButton.textContent = "Delete";
+            newNoteDeleteButton.addEventListener("click", () => {
+                const index = Array.prototype.indexOf.call(
+                    noteList.children,
+                    newNote
+                );
+                toDoItem.removeNote(index);
+                newNote.remove();
+            });
+            newNote.appendChild(newNoteDeleteButton);
+
+            currentCount++;
+        };
+
+        toDoItem.getNotes().forEach((text) => newNoteItem(text));
+
+        const newNoteButton = document.createElement("button");
+        newNoteButton.classList.add(
+            "to-do-item-notes-new-note-button",
+            "material-symbols-rounded"
+        );
+        newNoteButton.textContent = "Add";
+        newNoteButton.addEventListener("click", () => {
+            toDoItem.newNote("");
+            newNoteItem();
+        });
+        notes.appendChild(newNoteButton);
+    };
+
+    const drawChecklist = () => {
+        if (checklist) checklist.remove();
+        checklist = document.createElement("div");
+        checklist.classList.add("to-do-item-checklist");
+
+        expandedInfo.appendChild(checklist);
     };
 
     const refresh = () => {

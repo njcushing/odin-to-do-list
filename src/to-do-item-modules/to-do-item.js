@@ -3,11 +3,12 @@ import checklistItem from "./item-checklist.js";
 
 const toDoItem = () => {
     let name = "New Item";
-    let description = "Empty";
+    let description = "";
     let dueDate = new Date();
+    let dateCreated = new Date();
     let priority = 0;
+    let notes = [];
     let checklist = [];
-    let notes = "Empty";
     let completed = false;
 
     dueDate.setDate(dueDate.getDate() + 1);
@@ -60,6 +61,10 @@ const toDoItem = () => {
         return dueDate;
     };
 
+    const getDateCreated = () => {
+        return dateCreated;
+    };
+
     const setPriority = (x) => {
         if (typeof x !== "number") return;
         x = clampNumber(x, 0, 5);
@@ -69,6 +74,25 @@ const toDoItem = () => {
         return priority;
     };
 
+    const newNote = (x) => {
+        if (typeof x !== "string") return;
+        if (x.length > 500) x = x.slice(0, 500);
+        notes.push(x);
+    };
+    const setNote = (i, x) => {
+        if (typeof i !== "number" || i < 0 || i >= notes.length) return;
+        if (typeof x !== "string") return;
+        if (x.length > 500) x = x.slice(0, 500);
+        notes[i] = x;
+    };
+    const getNotes = () => {
+        return notes;
+    };
+    const removeNote = (i) => {
+        if (typeof i !== "number" || i < 0 || i >= notes.length) return;
+        notes.splice(i, 1);
+    };
+
     const addChecklistItem = (n, s) => {
         checklist.push(checklistItem());
         checklist[checklist.length - 1].setName(n);
@@ -76,15 +100,6 @@ const toDoItem = () => {
     };
     const getChecklist = () => {
         return checklist;
-    };
-
-    const setNotes = (x) => {
-        if (typeof x !== "string") return;
-        if (x.length > 500) x = x.slice(0, 500);
-        notes = x;
-    };
-    const getNotes = () => {
-        return notes;
     };
 
     const setCompleted = (x) => {
@@ -106,12 +121,15 @@ const toDoItem = () => {
         setDueDateHour,
         setDueDateMinute,
         getDueDate,
+        getDateCreated,
         setPriority,
         getPriority,
+        newNote,
+        setNote,
+        getNotes,
+        removeNote,
         addChecklistItem,
         getChecklist,
-        setNotes,
-        getNotes,
         setCompleted,
         getCompleted,
     };

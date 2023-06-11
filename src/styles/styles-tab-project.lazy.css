@@ -187,8 +187,8 @@
     background-color: #ffffff;
     box-shadow: 0px 4px 5px -0px rgba(128, 128, 128, 0.3);
     height: 2.4rem;
-    padding: 0.0rem 0.4rem;
     gap: 10px;
+    padding: 0.0rem 0.4rem;
 }
 
 .to-do-item-edit-name {
@@ -284,7 +284,84 @@
 .to-do-item-expanded-information {
     margin-top: -0.4rem;
     grid-area: 2 / 2 / 5 / -1;
-    height: 200px;
+    display: grid;
+    grid-template-rows: auto;
+    grid-template-columns: repeat(2, 50%);
     background-color: #ffffff;
     box-shadow: 0px 4px 5px -0px rgba(128, 128, 128, 0.3);
+    padding: 0.0rem 0.4rem 0.4rem 0.4rem;
+}
+
+.to-do-item-description {
+    grid-area: 1 / 1 / 2 / -1;
+    width: 100%;
+}
+.to-do-item-description-label {
+    font-size: 0.8rem;
+    color: rgb(66, 66, 66);
+    align-items: end;
+}
+.to-do-item-description-input {
+    resize: none;
+    font-family: var(--nunito-font-family);
+    font-size: 0.8rem;
+    font-style: italic;
+    color: rgb(50, 50, 50);
+    background-color: transparent;
+    border: none;
+    border-radius: 0.2rem;
+    width: calc(100% - 0.3rem);
+}
+.to-do-item-description-input:hover {
+    outline: 1px solid rgb(128, 128, 128);
+    border-radius: 0.2rem;
+}
+.to-do-item-description-input:focus {
+    outline: 2px solid rgb(70, 70, 70);
+    border-radius: 0.2rem;
+}
+
+.to-do-item-notes::before {
+    content: "Notes";
+    font-size: 0.8rem;
+    color: rgb(66, 66, 66);
+}
+.to-do-item-notes {
+    display: grid;
+    grid-template-rows: repeat(2, auto);
+}
+.to-do-item-notes-list {
+    display: grid;
+    grid-template-rows: auto;
+    list-style: none;
+    padding: 0px;
+    margin: 0px;
+}
+.to-do-item-notes-list-item {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 0.2rem;
+    margin-bottom: 0.3rem;
+}
+.to-do-item-notes-list-item-input {
+    font-family: var(--nunito-font-family);
+    font-size: 0.8rem;
+    color: rgb(50, 50, 50);
+    background-color: transparent;
+    outline: 1px solid rgb(70, 70, 70);
+    border: none;
+    border-radius: 0.2rem;
+}
+
+
+
+.to-do-item-notes-list-item-delete-button {
+    color: rgb(66, 66, 66);
+    background-color: #8f8f8f;
+    font-size: 0.8rem;
+    font-weight: normal;
+    border: none;
+    border-radius: 0.2rem;
+    width: auto;
+    height: 100%;
 }
