@@ -119,17 +119,19 @@
     grid-area: 1 / 4 / 2 / 5;
 }
 .sort-to-do-items-drop-down-menu {
+    display: none;
+}
+.sort-to-do-items-drop-down-menu.open {
     display: grid;
     grid-template-rows: auto;
     font-size: 1.1rem;
+    font-weight: bold;
     text-align: center;                        
     border-radius: 1rem;
     background-color: white;
     box-shadow: 0px 4px 5px -0px rgba(128, 128, 128, 0.3);
     padding: 0.5rem 0.7rem;
     z-index: 1;
-}
-.sort-to-do-items-drop-down-menu:hover {
 }
 .sort-to-do-items-drop-down-separator {
     justify-self: center;
@@ -148,6 +150,9 @@
     border-radius: 9999px;
     background-color: transparent;
     padding: 0.1rem 0.5rem;
+}
+.sort-to-do-items-drop-down-option.current-sort {
+    background-color: #df9d24;
 }
 .sort-to-do-items-drop-down-option:hover {
     background-color: #ecc825;

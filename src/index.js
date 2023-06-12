@@ -295,7 +295,11 @@ const displayController = (() => {
             "no-select"
         );
         sortToDoItemsButton.textContent = "Sort";
-        sortToDoItemsButton.addEventListener("click", () => {});
+        sortToDoItemsButton.addEventListener("click", (event) => {
+            sortToDoItemsDropDownMenu.classList.add("open");
+            event.stopPropagation();
+            checkClickedOutside(sortToDoItemsDropDownMenu);
+        });
         buttons.appendChild(sortToDoItemsButton);
 
         let sortToDoItemsDropDownMenu = document.createElement("div");
@@ -312,8 +316,14 @@ const displayController = (() => {
         const dropDownOption = (text, id) => {
             let sortOption = document.createElement("button");
             sortOption.classList.add("sort-to-do-items-drop-down-option");
+            if (project.getSort() === id)
+                sortOption.classList.add("current-sort");
             sortOption.setAttribute("option", id);
             sortOption.textContent = text;
+            sortOption.addEventListener("click", () => {
+                project.setSort(sortOption.getAttribute("option"));
+                refreshContent();
+            });
             sortToDoItemsDropDownMenu.appendChild(sortOption);
         };
         dropDownOption("Date Added: Newest First", "NEWEST");
@@ -377,6 +387,16 @@ const displayController = (() => {
             }
         }
         return true;
+    };
+
+    const checkClickedOutside = (element) => {
+        const clickCheck = (event) => {
+            if (event.target !== element) {
+                element.classList.remove("open");
+                document.removeEventListener("click", clickCheck);
+            }
+        };
+        document.addEventListener("click", clickCheck);
     };
 
     refreshContent();
