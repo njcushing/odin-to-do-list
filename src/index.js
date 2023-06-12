@@ -295,7 +295,37 @@ const displayController = (() => {
             "no-select"
         );
         sortToDoItemsButton.textContent = "Sort";
+        sortToDoItemsButton.addEventListener("click", () => {});
         buttons.appendChild(sortToDoItemsButton);
+
+        let sortToDoItemsDropDownMenu = document.createElement("div");
+        sortToDoItemsDropDownMenu.classList.add(
+            "sort-to-do-items-drop-down-menu"
+        );
+        sortToDoItemsDropDownMenu.textContent = "Sort Items";
+        buttons.appendChild(sortToDoItemsDropDownMenu);
+
+        let dropDownSeparator = document.createElement("div");
+        dropDownSeparator.classList.add("sort-to-do-items-drop-down-separator");
+        sortToDoItemsDropDownMenu.appendChild(dropDownSeparator);
+
+        const dropDownOption = (text, id) => {
+            let sortOption = document.createElement("button");
+            sortOption.classList.add("sort-to-do-items-drop-down-option");
+            sortOption.setAttribute("option", id);
+            sortOption.textContent = text;
+            sortToDoItemsDropDownMenu.appendChild(sortOption);
+        };
+        dropDownOption("Date Added: Newest First", "NEWEST");
+        dropDownOption("Date Added: Oldest First", "OLDEST");
+        dropDownOption("Due By: Sooner First", "DUE_SOONER");
+        dropDownOption("Due By: Later First", "DUE_LATER");
+        dropDownOption("Priority: High to Low", "PRIORITY_HIGH");
+        dropDownOption("Priority: Low to High", "PRIORITY_LOW");
+        dropDownOption("Incomplete Items First", "INCOMPLETE");
+        dropDownOption("Complete Items First", "COMPLETE");
+        dropDownOption("Alphabetical", "ALPHABETICAL");
+        dropDownOption("Reversed Alphabetical", "ALPHABETICAL_REVERSE");
 
         let toDoItemsContainer = document.createElement("div");
         toDoItemsContainer.classList.add("project-to-do-items-container");

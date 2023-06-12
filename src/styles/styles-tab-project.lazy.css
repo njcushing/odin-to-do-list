@@ -113,6 +113,45 @@
     background-color: #d64ab3;
 }
 
+.project-buttons-sort-to-do-items,
+.sort-to-do-items-drop-down-menu {
+    grid-area: 1 / 4 / 2 / 5;
+}
+.sort-to-do-items-drop-down-menu {
+    display: grid;
+    grid-template-rows: auto;
+    position: absolute;
+    font-size: 1.1rem;
+    text-align: center;                        
+    border-radius: 1rem;
+    background-color: white;
+    padding: 0.5rem 0.7rem;
+}
+.sort-to-do-items-drop-down-separator {
+    justify-self: center;
+    border-radius: 9999px;
+    width: 104%;
+    height: 2px;
+    background-color: #dadada;
+    margin-bottom: 4px;
+}
+.sort-to-do-items-drop-down-option {
+    font-family: var(--nunito-font-family);                            
+    font-size: 0.8rem;
+    text-align: center;
+    outline: none;
+    border: none;
+    border-radius: 9999px;
+    background-color: transparent;
+    padding: 0.1rem 0.5rem;
+}
+.sort-to-do-items-drop-down-option:hover {
+    background-color: #ecc825;
+}
+.sort-to-do-items-drop-down-option:active {
+    background-color: #d1af15;
+}
+
 .project-to-do-items-container {
     display: grid;
     grid-template-rows: auto;
