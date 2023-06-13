@@ -147,6 +147,7 @@
     font-size: 0.7rem;
     text-align: center;
     font-weight: bold;
+    text-decoration: underline;
     padding-top: 0.4rem;
 }
 .to-do-items-sort-menu-type {

@@ -22,17 +22,19 @@ const domToDoProjectSortMenu = (project) => {
         if (project.getSort(group) === type) typ.classList.add("current-sort");
         typ.textContent = text;
         typ.addEventListener("click", () => {
-            if (typ.classList.contains("current-sort")) {
+            if (project.getSort(group) === type) {
+                project.setSort(group, "NONE");
                 typ.classList.remove("current-sort");
             } else {
+                project.setSort(group, type);
                 const typesInGroupElements = menuContainer.querySelectorAll(
                     `.to-do-items-sort-menu-type-${group}`
                 );
                 typesInGroupElements.forEach((e) => {
                     e.classList.remove("current-sort");
                 });
-                typ.classList.add("current-sort");
-                project.setSort(group, type);
+                if (project.getSort(group) === type)
+                    typ.classList.add("current-sort");
             }
         });
         menuContainer.appendChild(typ);

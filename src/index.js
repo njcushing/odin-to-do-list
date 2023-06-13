@@ -201,7 +201,6 @@ const displayController = (() => {
     const displayProject = () => {
         const project = projects.getProjects()[currentProject];
         const toDoItems = project.getToDoItems();
-        let newItemBeingCreated = false;
 
         recreateProjectNameInput();
         projectNameInput.value = project.getName();
@@ -298,13 +297,19 @@ const displayController = (() => {
         sortToDoItemsButton.textContent = "Sort";
         sortToDoItemsButton.addEventListener("click", (event) => {
             sortToDoItemsDropDownMenu.classList.add("open");
-            event.stopPropagation();
             checkClickedOutside(sortToDoItemsDropDownMenu);
+            event.stopPropagation();
         });
         buttons.appendChild(sortToDoItemsButton);
 
         let sortToDoItemsDropDownMenu = domToDoProjectSortMenu(project);
         buttons.appendChild(sortToDoItemsDropDownMenu);
+        const sortTypes = sortToDoItemsDropDownMenu.querySelectorAll(
+            ".to-do-items-sort-menu-type"
+        );
+        sortTypes.forEach((sortType) => {
+            sortType.addEventListener("click", refreshContent);
+        });
 
         let toDoItemsContainer = document.createElement("div");
         toDoItemsContainer.classList.add("project-to-do-items-container");
@@ -360,7 +365,7 @@ const displayController = (() => {
 
     const checkClickedOutside = (element) => {
         const clickCheck = (event) => {
-            if (event.target !== element) {
+            if (!element.contains(event.target)) {
                 element.classList.remove("open");
                 document.removeEventListener("click", clickCheck);
             }
