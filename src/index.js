@@ -1,6 +1,7 @@
 import "./styles.css";
 import toDoProject from "./project-modules/to-do-project.js";
 import domToDoProject from "./project-modules/dom_to-do-project.js";
+import domToDoProjectSortMenu from "./project-modules/dom_to-do-project-sort-menu.js";
 import toDoItem from "./to-do-item-modules/to-do-item.js";
 import domToDoItem from "./to-do-item-modules/dom_to-do-item.js";
 import projectListTabStyles from "./styles/styles-tab-projectlist.lazy.css";
@@ -302,40 +303,8 @@ const displayController = (() => {
         });
         buttons.appendChild(sortToDoItemsButton);
 
-        let sortToDoItemsDropDownMenu = document.createElement("div");
-        sortToDoItemsDropDownMenu.classList.add(
-            "sort-to-do-items-drop-down-menu"
-        );
-        sortToDoItemsDropDownMenu.textContent = "Sort Items";
+        let sortToDoItemsDropDownMenu = domToDoProjectSortMenu(project);
         buttons.appendChild(sortToDoItemsDropDownMenu);
-
-        let dropDownSeparator = document.createElement("div");
-        dropDownSeparator.classList.add("sort-to-do-items-drop-down-separator");
-        sortToDoItemsDropDownMenu.appendChild(dropDownSeparator);
-
-        const dropDownOption = (text, id) => {
-            let sortOption = document.createElement("button");
-            sortOption.classList.add("sort-to-do-items-drop-down-option");
-            if (project.getSort() === id)
-                sortOption.classList.add("current-sort");
-            sortOption.setAttribute("option", id);
-            sortOption.textContent = text;
-            sortOption.addEventListener("click", () => {
-                project.setSort(sortOption.getAttribute("option"));
-                refreshContent();
-            });
-            sortToDoItemsDropDownMenu.appendChild(sortOption);
-        };
-        dropDownOption("Date Added: Newest First", "NEWEST");
-        dropDownOption("Date Added: Oldest First", "OLDEST");
-        dropDownOption("Due By: Sooner First", "DUE_SOONER");
-        dropDownOption("Due By: Later First", "DUE_LATER");
-        dropDownOption("Priority: High to Low", "PRIORITY_HIGH");
-        dropDownOption("Priority: Low to High", "PRIORITY_LOW");
-        dropDownOption("Incomplete Items First", "INCOMPLETE");
-        dropDownOption("Complete Items First", "COMPLETE");
-        dropDownOption("Alphabetical", "ALPHABETICAL");
-        dropDownOption("Reversed Alphabetical", "ALPHABETICAL_REVERSE");
 
         let toDoItemsContainer = document.createElement("div");
         toDoItemsContainer.classList.add("project-to-do-items-container");

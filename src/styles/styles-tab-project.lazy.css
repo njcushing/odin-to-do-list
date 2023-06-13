@@ -115,15 +115,16 @@
 }
 
 .project-buttons-sort-to-do-items,
-.sort-to-do-items-drop-down-menu {
+.to-do-items-sort-menu {
     grid-area: 1 / 4 / 2 / 5;
 }
-.sort-to-do-items-drop-down-menu {
+.to-do-items-sort-menu {
     display: none;
 }
-.sort-to-do-items-drop-down-menu.open {
+.to-do-items-sort-menu.open {
     display: grid;
     grid-template-rows: auto;
+    font-family: var(--nunito-font-family);     
     font-size: 1.1rem;
     font-weight: bold;
     text-align: center;                        
@@ -133,7 +134,7 @@
     padding: 0.5rem 0.7rem;
     z-index: 1;
 }
-.sort-to-do-items-drop-down-separator {
+.to-do-items-sort-menu-separator {
     justify-self: center;
     border-radius: 9999px;
     width: 104%;
@@ -141,7 +142,14 @@
     background-color: #dadada;
     margin-bottom: 4px;
 }
-.sort-to-do-items-drop-down-option {
+.to-do-items-sort-menu-group {
+    font-family: var(--nunito-font-family);                            
+    font-size: 0.7rem;
+    text-align: center;
+    font-weight: bold;
+    padding-top: 0.4rem;
+}
+.to-do-items-sort-menu-type {
     font-family: var(--nunito-font-family);                            
     font-size: 0.8rem;
     text-align: center;
@@ -151,13 +159,13 @@
     background-color: transparent;
     padding: 0.1rem 0.5rem;
 }
-.sort-to-do-items-drop-down-option.current-sort {
+.to-do-items-sort-menu-type.current-sort {
     background-color: #df9d24;
 }
-.sort-to-do-items-drop-down-option:hover {
+.to-do-items-sort-menu-type:hover {
     background-color: #ecc825;
 }
-.sort-to-do-items-drop-down-option:active {
+.to-do-items-sort-menu-type:active {
     background-color: #d1af15;
 }
 
