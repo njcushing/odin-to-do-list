@@ -241,6 +241,10 @@ const displayController = (() => {
             refreshContent();
         });
 
+        let newToDoItemsContainer = document.createElement("div");
+        newToDoItemsContainer.classList.add("project-to-do-items-container");
+        toDoListContainer.appendChild(newToDoItemsContainer);
+
         let newToDoItemButton = document.createElement("button");
         newToDoItemButton.classList.add(
             "project-buttons-new-to-do-item",
@@ -251,22 +255,10 @@ const displayController = (() => {
         newToDoItemButton.addEventListener("click", () => {
             let newItem = toDoItem();
             let newItemElement = domToDoItem(newItem);
-            toDoItemsContainer.insertBefore(
-                newItemElement.e,
-                toDoItemsContainer.childNodes[0]
-            );
             newItemElement.e.classList.add("newly-created-item");
-
-            const refreshItem = () => newItemElement.refresh();
+            newToDoItemsContainer.appendChild(newItemElement.e);
 
             newItemElement.setExpanded(true);
-            newItemElement.setDeleteButtonFunction(() => {
-                refreshToDoItemsButton.removeEventListener(
-                    "click",
-                    refreshItem
-                );
-                newItemElement.e.remove();
-            });
 
             let confirmButton = document.createElement("button");
             confirmButton.classList.add(
@@ -274,8 +266,12 @@ const displayController = (() => {
                 "material-symbols-rounded"
             );
             confirmButton.textContent = "Add";
+            confirmButton.addEventListener("click", () => {
+                newToDoItemsContainer.removeChild(newItemElement.e);
+                project.appendExistingToDoItem(newItem);
+                drawToDoItems();
+            });
             newItemElement.e.appendChild(confirmButton);
-            refreshToDoItemsButton.addEventListener("click", refreshItem);
         });
         buttons.appendChild(newToDoItemButton);
 
@@ -286,6 +282,9 @@ const displayController = (() => {
             "no-select"
         );
         refreshToDoItemsButton.textContent = "Refresh";
+        refreshToDoItemsButton.addEventListener("click", () => {
+            drawToDoItems();
+        });
         buttons.appendChild(refreshToDoItemsButton);
 
         let sortToDoItemsButton = document.createElement("button");
@@ -308,27 +307,24 @@ const displayController = (() => {
             ".to-do-items-sort-menu-type"
         );
         sortTypes.forEach((sortType) => {
-            sortType.addEventListener("click", refreshContent);
-        });
-
-        let toDoItemsContainer = document.createElement("div");
-        toDoItemsContainer.classList.add("project-to-do-items-container");
-        toDoListContainer.appendChild(toDoItemsContainer);
-
-        toDoItems.forEach((item) => {
-            let newItemElement = domToDoItem(item);
-
-            const refreshItem = () => newItemElement.refresh();
-            refreshToDoItemsButton.addEventListener("click", refreshItem);
-
-            newItemElement.setDeleteButtonFunction(() => {
-                refreshToDoItemsButton.removeEventListener(
-                    "click",
-                    refreshItem
-                );
+            sortType.addEventListener("click", () => {
+                sortToDoItemsDropDownMenu.classList.remove("open");
+                drawToDoItems();
             });
-            toDoItemsContainer.appendChild(newItemElement.e);
         });
+
+        let toDoItemsContainer;
+        const drawToDoItems = () => {
+            if (toDoItemsContainer) toDoItemsContainer.remove();
+            toDoItemsContainer = document.createElement("div");
+            toDoItemsContainer.classList.add("project-to-do-items-container");
+            toDoListContainer.appendChild(toDoItemsContainer);
+            toDoItems.forEach((item) => {
+                let newItemElement = domToDoItem(item);
+                toDoItemsContainer.appendChild(newItemElement.e);
+            });
+        };
+        drawToDoItems();
     };
 
     const recreateProjectNameInput = () => {

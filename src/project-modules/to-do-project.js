@@ -115,6 +115,9 @@ const toDoProject = (n = "Project Name") => {
         items.push(newItem);
         return newItem;
     };
+    const appendExistingToDoItem = (item) => {
+        items.push(item);
+    };
     const removeToDoItem = (x) => {
         if (typeof x !== "number") return;
         if (x < 0 || x >= items.length) return;
@@ -139,6 +142,7 @@ const toDoProject = (n = "Project Name") => {
         setSort,
         getSort,
         addToDoItem,
+        appendExistingToDoItem,
         removeToDoItem,
         getToDoItem,
         getToDoItems,
