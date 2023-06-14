@@ -131,52 +131,73 @@ const toDoProject = (n = "Project Name") => {
     const getToDoItems = () => {
         return items;
     };
-    const getToDoItemsSorted = () => {
+    const getToDoItemsSortedDefault = () => {
         let sortedArray = getToDoItems().slice();
         sortedArray.sort((a, b) => {
-            if (
-                sorts["DATE_ADDED"] === "NONE" ||
-                a.getDateCreated() === b.getDateCreated()
-            ) {
-                if (
-                    sorts["DUE_BY"] === "NONE" ||
-                    a.getDueDate() === b.getDueDate()
-                ) {
-                    if (
-                        sorts["PRIORITY"] === "NONE" ||
-                        a.getPriority() === b.getPriority()
-                    ) {
+            if (a.getCompleted() === b.getCompleted()) {
+                return a.getDueDate() - b.getDueDate();
+            }
+            return a.getCompleted() - b.getCompleted();
+        });
+        return sortedArray;
+    };
+    const getToDoItemsSortedCustom = (params) => {
+        let sortedArray = getToDoItems().slice();
+        sortedArray.sort((a, b) => {
+            params.forEach((group) => {
+                switch (group) {
+                    case "DATE_ADDED":
+                        if (
+                            sorts["DATE_ADDED"] === "NONE" ||
+                            a.getDateCreated() === b.getDateCreated()
+                        ) {
+                            break;
+                        }
+                        return sorts["DATE_ADDED"] === "NEWEST"
+                            ? a.getDateCreated() - b.getDateCreated()
+                            : b.getDateCreated() - a.getDateCreated();
+                    case "DUE_BY":
+                        if (
+                            sorts["DUE_BY"] === "NONE" ||
+                            a.getDueDate() === b.getDueDate()
+                        ) {
+                            break;
+                        }
+                        return sorts["DUE_BY"] === "SOONER"
+                            ? a.getDueDate() - b.getDueDate()
+                            : b.getDueDate() - a.getDueDate();
+                    case "PRIORITY":
+                        if (
+                            sorts["PRIORITY"] === "NONE" ||
+                            a.getPriority() === b.getPriority()
+                        ) {
+                            break;
+                        }
+                        return sorts["PRIORITY"] === "LOW"
+                            ? a.getPriority() - b.getPriority()
+                            : b.getPriority() - a.getPriority();
+                    case "STATUS":
                         if (
                             sorts["STATUS"] === "NONE" ||
                             a.getCompleted() === b.getCompleted()
                         ) {
-                            if (
-                                sorts["ALPHABETICAL"] === "NONE" ||
-                                a.getName().localeCompare(b.getName()) === 0
-                            ) {
-                                return sorts["DATE_ADDED"] === "NEWEST"
-                                    ? a.getDateCreated() - b.getDateCreated()
-                                    : b.getDateCreated() - a.getDateCreated();
-                            }
-                            return sorts["ALPHABETICAL"] === "NORMAL"
-                                ? a.getName().localeCompare(b.getName())
-                                : b.getName().localeCompare(a.getName());
+                            break;
                         }
                         return sorts["STATUS"] === "INCOMPLETE"
                             ? a.getCompleted() - b.getCompleted()
                             : b.getCompleted() - a.getCompleted();
-                    }
-                    return sorts["PRIORITY"] === "LOW"
-                        ? a.getPriority() - b.getPriority()
-                        : b.getPriority() - a.getPriority();
+                    case "ALPHABETICAL":
+                        if (
+                            sorts["ALPHABETICAL"] === "NONE" ||
+                            a.getName().localeCompare(b.getName()) === 0
+                        ) {
+                            break;
+                        }
+                        return sorts["ALPHABETICAL"] === "NORMAL"
+                            ? a.getName().localeCompare(b.getName())
+                            : b.getName().localeCompare(a.getName());
                 }
-                return sorts["DUE_BY"] === "SOONER"
-                    ? a.getDueDate() - b.getDueDate()
-                    : b.getDueDate() - a.getDueDate();
-            }
-            return sorts["DATE_ADDED"] === "NEWEST"
-                ? a.getDateCreated() - b.getDateCreated()
-                : b.getDateCreated() - a.getDateCreated();
+            });
         });
         return sortedArray;
     };
@@ -195,7 +216,8 @@ const toDoProject = (n = "Project Name") => {
         removeToDoItem,
         getToDoItem,
         getToDoItems,
-        getToDoItemsSorted,
+        getToDoItemsSortedDefault,
+        getToDoItemsSortedCustom,
         getDateCreated,
     };
 };
