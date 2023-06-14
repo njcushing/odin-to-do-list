@@ -39,6 +39,8 @@ const domToDoItem = (item) => {
         if (expanded) e.classList.add("expanded");
         else e.classList.add("collapsed");
 
+        if (toDoItem.getCompleted()) e.classList.add("completed-item");
+
         drawExpandCollapseButton();
 
         topBarInformation = document.createElement("div");
@@ -203,7 +205,6 @@ const domToDoItem = (item) => {
 
     const drawCompletedItemButton = () => {
         if (completedItemButton) completedItemButton.remove();
-        if (toDoItem.getCompleted()) e.classList.add("completed-item");
         completedItemButton = document.createElement("button");
         completedItemButton.classList.add(
             "to-do-item-completed-item-button",

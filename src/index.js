@@ -200,7 +200,6 @@ const displayController = (() => {
 
     const displayProject = () => {
         const project = projects.getProjects()[currentProject];
-        const toDoItems = project.getToDoItems();
 
         recreateProjectNameInput();
         projectNameInput.value = project.getName();
@@ -316,6 +315,7 @@ const displayController = (() => {
         let toDoItemsContainer;
         const drawToDoItems = () => {
             if (toDoItemsContainer) toDoItemsContainer.remove();
+            const toDoItems = project.getToDoItemsSorted();
             toDoItemsContainer = document.createElement("div");
             toDoItemsContainer.classList.add("project-to-do-items-container");
             toDoListContainer.appendChild(toDoItemsContainer);
