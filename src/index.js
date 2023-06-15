@@ -15,19 +15,7 @@ const displayController = (() => {
     let projectNameInput;
     let content;
     let newProjectFormCover;
-    let currentProject = 0;
-
-    const createPage = (() => {
-        page = document.createElement("div");
-        page.classList.add("page");
-        document.querySelector("body").appendChild(page);
-        header = document.createElement("div");
-        header.classList.add("header");
-        page.appendChild(header);
-        content = document.createElement("div");
-        content.classList.add("content");
-        page.appendChild(content);
-    })();
+    let currentProject;
 
     const projects = (() => {
         let projectList = [];
@@ -59,24 +47,22 @@ const displayController = (() => {
         };
     })();
 
-    const p1 = projects.newProject("test-project-1");
-    const p1_i1 = p1.addToDoItem();
-    p1_i1.setName("test-item-1");
-    p1_i1.setDueDateYear(2024);
-    p1_i1.setDueDateMonth(11);
-    p1_i1.setPriority(3);
-    const p1_i2 = p1.addToDoItem();
-    p1_i2.setName("test-item-2");
-    p1_i2.setDueDateYear(2025);
-    p1_i2.setDueDateMonth(3);
-    const p1_i3 = p1.addToDoItem();
-    p1_i3.setName("test-item-3");
-    p1_i3.setDueDateYear(2027);
-    p1_i3.setDueDateMonth(1);
+    if (projects.getProjects().length === 0) {
+        currentProject = 0;
+        projects.newProject("My New Project");
+    }
 
-    projects.newProject("test-project-2");
-    projects.newProject("test-project-3");
-    projects.newProject("test-project-4");
+    const createPage = (() => {
+        page = document.createElement("div");
+        page.classList.add("page");
+        document.querySelector("body").appendChild(page);
+        header = document.createElement("div");
+        header.classList.add("header");
+        page.appendChild(header);
+        content = document.createElement("div");
+        content.classList.add("content");
+        page.appendChild(content);
+    })();
 
     const refreshContent = () => {
         if (!content) return;
