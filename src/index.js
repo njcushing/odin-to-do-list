@@ -324,9 +324,17 @@ const displayController = (() => {
                 newItemElement.setDeleteButtonFunction(() => {
                     toDoItemsContainer.removeChild(newItemElement.e);
                     project.removeToDoItemByReference(item);
+                    if (project.getToDoItems().length === 0) drawToDoItems();
                 });
                 toDoItemsContainer.appendChild(newItemElement.e);
             });
+            if (toDoItems.length === 0) {
+                const toDoItemPrompt = document.createElement("div");
+                toDoItemPrompt.classList.add("to-do-item-prompt");
+                toDoItemPrompt.textContent =
+                    "Press the '+' button to add a new to-do item to your project";
+                toDoItemsContainer.appendChild(toDoItemPrompt);
+            }
         };
         drawToDoItems();
     };

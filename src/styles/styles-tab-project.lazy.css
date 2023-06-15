@@ -233,6 +233,12 @@
     gap: 10px;
 }
 
+.to-do-item-prompt {
+    text-align: center;
+    outline: 2px dashed #6d6d6d;
+    padding: 0.4rem 0.4rem;
+}
+
 .to-do-item {
     display: grid;
     grid-template-rows: auto;
