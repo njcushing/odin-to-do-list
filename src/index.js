@@ -302,6 +302,15 @@ const displayController = (() => {
 
         let sortToDoItemsDropDownMenu = domToDoProjectSortMenu(project);
         buttons.appendChild(sortToDoItemsDropDownMenu);
+        const sortOrderGroups = sortToDoItemsDropDownMenu.querySelectorAll(
+            ".to-do-items-sort-menu-order-list-item"
+        );
+        sortOrderGroups.forEach((sortOrderGroup) => {
+            sortOrderGroup.addEventListener("click", () => {
+                sortToDoItemsDropDownMenu.classList.remove("open");
+                drawToDoItems();
+            });
+        });
         const sortTypes = sortToDoItemsDropDownMenu.querySelectorAll(
             ".to-do-items-sort-menu-type"
         );
@@ -315,7 +324,7 @@ const displayController = (() => {
         let toDoItemsContainer;
         const drawToDoItems = () => {
             if (toDoItemsContainer) toDoItemsContainer.remove();
-            const toDoItems = project.getToDoItemsSortedDefault();
+            const toDoItems = project.getToDoItemsSorted();
             toDoItemsContainer = document.createElement("div");
             toDoItemsContainer.classList.add("project-to-do-items-container");
             toDoListContainer.appendChild(toDoItemsContainer);

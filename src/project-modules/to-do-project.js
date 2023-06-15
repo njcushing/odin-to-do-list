@@ -5,11 +5,12 @@ const toDoProject = (n = "Project Name") => {
     if (typeof n === "string") name = n;
     let sorts = {
         DATE_ADDED: "NONE",
-        DUE_BY: "NONE",
+        DUE_BY: "SOONER",
         PRIORITY: "NONE",
-        STATUS: "NONE",
+        STATUS: "INCOMPLETE",
         ALPHABETICAL: "NONE",
     };
+    let sortOrder = ["STATUS", "DUE_BY"];
     let items = [];
     let dateCreated = new Date();
 
@@ -109,6 +110,12 @@ const toDoProject = (n = "Project Name") => {
                 break;
         }
     };
+    const setSortOrder = (ord) => {
+        sortOrder = ord;
+    };
+    const getSortOrder = () => {
+        return sortOrder;
+    };
 
     const addToDoItem = () => {
         let newItem = toDoItem();
@@ -131,20 +138,11 @@ const toDoProject = (n = "Project Name") => {
     const getToDoItems = () => {
         return items;
     };
-    const getToDoItemsSortedDefault = () => {
+    const getToDoItemsSorted = () => {
         let sortedArray = getToDoItems().slice();
         sortedArray.sort((a, b) => {
-            if (a.getCompleted() === b.getCompleted()) {
-                return a.getDueDate() - b.getDueDate();
-            }
-            return a.getCompleted() - b.getCompleted();
-        });
-        return sortedArray;
-    };
-    const getToDoItemsSortedCustom = (params) => {
-        let sortedArray = getToDoItems().slice();
-        sortedArray.sort((a, b) => {
-            params.forEach((group) => {
+            for (let i = 0; i < sortOrder.length; i++) {
+                const group = sortOrder[i];
                 switch (group) {
                     case "DATE_ADDED":
                         if (
@@ -196,8 +194,11 @@ const toDoProject = (n = "Project Name") => {
                         return sorts["ALPHABETICAL"] === "NORMAL"
                             ? a.getName().localeCompare(b.getName())
                             : b.getName().localeCompare(a.getName());
+                    default:
+                        return 0;
                 }
-            });
+            }
+            return 0;
         });
         return sortedArray;
     };
@@ -211,13 +212,14 @@ const toDoProject = (n = "Project Name") => {
         getName,
         setSort,
         getSort,
+        setSortOrder,
+        getSortOrder,
         addToDoItem,
         appendExistingToDoItem,
         removeToDoItem,
         getToDoItem,
         getToDoItems,
-        getToDoItemsSortedDefault,
-        getToDoItemsSortedCustom,
+        getToDoItemsSorted,
         getDateCreated,
     };
 };
