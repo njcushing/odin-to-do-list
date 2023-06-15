@@ -47,6 +47,20 @@
     background-color: rgba(255, 106, 106, 0.18);
     border-color: red;
 }
+.project-name-label {
+    position: relative;
+}
+.project-name-label::before {
+    font-family: var(--nunito-font-family);
+    position: absolute;
+    font-size: 0.7rem;
+    font-weight: normal;
+    white-space: nowrap;
+    color: transparent;
+    content: attr(help);
+    top: 2.7rem;
+    left: 2.0rem;
+}
 .project-name-input:not(:placeholder-shown).name-taken + .project-name-label::before {
     color: red;
 }
