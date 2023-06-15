@@ -125,10 +125,14 @@ const toDoProject = (n = "Project Name") => {
     const appendExistingToDoItem = (item) => {
         items.push(item);
     };
-    const removeToDoItem = (x) => {
+    const removeToDoItemByIndex = (x) => {
         if (typeof x !== "number") return;
         if (x < 0 || x >= items.length) return;
         items.splice(x, 1);
+    };
+    const removeToDoItemByReference = (r) => {
+        const index = items.indexOf(r);
+        if (index !== -1) items.splice(index, 1);
     };
     const getToDoItem = (x) => {
         if (typeof x !== "number") return;
@@ -216,7 +220,8 @@ const toDoProject = (n = "Project Name") => {
         getSortOrder,
         addToDoItem,
         appendExistingToDoItem,
-        removeToDoItem,
+        removeToDoItemByIndex,
+        removeToDoItemByReference,
         getToDoItem,
         getToDoItems,
         getToDoItemsSorted,

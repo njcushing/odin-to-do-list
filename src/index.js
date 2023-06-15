@@ -270,6 +270,11 @@ const displayController = (() => {
                 project.appendExistingToDoItem(newItem);
                 drawToDoItems();
             });
+
+            newItemElement.setDeleteButtonFunction(() => {
+                newToDoItemsContainer.removeChild(newItemElement.e);
+            });
+
             newItemElement.e.appendChild(confirmButton);
         });
         buttons.appendChild(newToDoItemButton);
@@ -330,6 +335,10 @@ const displayController = (() => {
             toDoListContainer.appendChild(toDoItemsContainer);
             toDoItems.forEach((item) => {
                 let newItemElement = domToDoItem(item);
+                newItemElement.setDeleteButtonFunction(() => {
+                    toDoItemsContainer.removeChild(newItemElement.e);
+                    project.removeToDoItemByReference(item);
+                });
                 toDoItemsContainer.appendChild(newItemElement.e);
             });
         };
