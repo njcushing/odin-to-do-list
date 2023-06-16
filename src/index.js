@@ -16,6 +16,7 @@ const displayController = (() => {
     header.classList.add("header");
     page.appendChild(header);
     let title;
+    let countInformer;
     let projectNameLabel;
     let projectNameInput;
     const content = document.createElement("div");
@@ -92,6 +93,7 @@ const displayController = (() => {
         if (!content) return;
         while (content.firstChild) content.lastChild.remove();
         if (title) title.remove();
+        if (countInformer) countInformer.remove();
         if (projectNameLabel) projectNameLabel.remove();
         if (projectNameInput) projectNameInput.remove();
         closeNewProjectForm();
@@ -112,12 +114,18 @@ const displayController = (() => {
         title.textContent = "My Projects";
         header.appendChild(title);
 
+        const projectList = projects.getProjects();
+
+        countInformer = document.createElement("h4");
+        countInformer.classList.add("project-count");
+        countInformer.textContent = `Projects Used: ${projectList.length} / ${maxProjectAllowance}`;
+        header.appendChild(countInformer);
+
         const projectContainer = document.createElement("div");
         projectContainer.classList.add("project-container");
         content.appendChild(projectContainer);
 
         let counter = 0;
-        const projectList = projects.getProjects();
         for (let i = 0; i < projectList.length; i++) {
             const current = counter;
             const parsedProject = toDoProject();
@@ -328,6 +336,7 @@ const displayController = (() => {
         );
         refreshToDoItemsButton.textContent = "Refresh";
         refreshToDoItemsButton.addEventListener("click", () => {
+            saveWorkingProject();
             drawToDoItems();
         });
         buttons.appendChild(refreshToDoItemsButton);

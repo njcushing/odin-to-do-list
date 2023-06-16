@@ -1,12 +1,20 @@
 .header {
     display: flex;
     justify-content: center;
+    flex-direction: column;
 }
 
 .title {
     align-self: center;
     font-size: 1.7rem;
     font-weight: bold;
+    white-space: nowrap;
+}
+
+.project-count {
+    align-self: center;
+    font-size: 0.9rem;
+    font-weight: normal;
     white-space: nowrap;
 }
 
