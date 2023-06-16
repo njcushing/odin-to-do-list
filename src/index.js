@@ -16,7 +16,6 @@ const displayController = (() => {
     header.classList.add("header");
     page.appendChild(header);
     let title;
-    let countInformer;
     let projectNameLabel;
     let projectNameInput;
     const content = document.createElement("div");
@@ -93,7 +92,6 @@ const displayController = (() => {
         if (!content) return;
         while (content.firstChild) content.lastChild.remove();
         if (title) title.remove();
-        if (countInformer) countInformer.remove();
         if (projectNameLabel) projectNameLabel.remove();
         if (projectNameInput) projectNameInput.remove();
         closeNewProjectForm();
@@ -116,10 +114,13 @@ const displayController = (() => {
 
         const projectList = projects.getProjects();
 
-        countInformer = document.createElement("h4");
-        countInformer.classList.add("project-count");
-        countInformer.textContent = `Projects Used: ${projectList.length} / ${maxProjectAllowance}`;
-        header.appendChild(countInformer);
+        const projectCount = document.createElement("h4");
+        projectCount.classList.add("project-count");
+        content.appendChild(projectCount);
+        const refreshProjectCount = () => {
+            projectCount.textContent = `Projects Used: ${projectList.length} / ${maxProjectAllowance}`;
+        };
+        refreshProjectCount();
 
         const projectContainer = document.createElement("div");
         projectContainer.classList.add("project-container");
@@ -142,6 +143,7 @@ const displayController = (() => {
                 for (let i = 0; i < projectContainer.children.length; i++) {
                     projectContainer.children[i].setAttribute("index", i);
                 }
+                refreshProjectCount();
             });
             counter++;
         }
@@ -321,9 +323,12 @@ const displayController = (() => {
 
                 newItemElement.setDeleteButtonFunction(() => {
                     newToDoItemsContainer.removeChild(newItemElement.e);
+                    refreshItemCount();
                 });
 
                 newItemElement.e.appendChild(confirmButton);
+
+                refreshItemCount();
             }
         });
         buttons.appendChild(newToDoItemButton);
@@ -402,6 +407,7 @@ const displayController = (() => {
                             project.removeToDoItem(i);
                         }
                     }
+                    refreshItemCount();
                     if (project.getToDoItems().length === 0) drawToDoItems();
                 });
                 toDoItemsContainer.appendChild(newItemElement.e);
@@ -415,6 +421,16 @@ const displayController = (() => {
             }
         };
         drawToDoItems();
+
+        const itemCount = document.createElement("div");
+        itemCount.classList.add("item-count");
+        toDoListContainer.appendChild(itemCount);
+        const refreshItemCount = () => {
+            itemCount.textContent = `Items Used: ${
+                toDoItems.length + newToDoItemsContainer.children.length
+            } / ${project.getMaxItemsAllowance()}`;
+        };
+        refreshItemCount();
 
         const saveWorkingProject = () => {
             toDoItems.forEach((item, i) => {

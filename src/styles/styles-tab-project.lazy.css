@@ -235,6 +235,14 @@
     background-color: #d1af15;
 }
 
+.item-count {
+    grid-area: 2 / 1 / 3 / 2;
+    text-align: center;
+    font-size: 0.9rem;
+    font-weight: normal;
+    white-space: nowrap;
+}
+
 .project-to-do-items-container {
     display: grid;
     grid-template-rows: auto;

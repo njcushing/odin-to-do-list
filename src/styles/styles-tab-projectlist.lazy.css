@@ -1,7 +1,6 @@
 .header {
     display: flex;
     justify-content: center;
-    flex-direction: column;
 }
 
 .title {
@@ -11,20 +10,21 @@
     white-space: nowrap;
 }
 
-.project-count {
-    align-self: center;
-    font-size: 0.9rem;
-    font-weight: normal;
-    white-space: nowrap;
-}
-
 .content .project-container {
     display: grid;
+    grid-template-rows: auto;
     grid-template-columns: repeat(auto-fit, 240px);
     justify-content: center;
     align-content: start;
     gap: 20px;
     padding: 20px;
+}
+
+.project-count {
+    text-align: center;
+    font-size: 0.9rem;
+    font-weight: normal;
+    white-space: nowrap;
 }
 
 .content .project-panel,
