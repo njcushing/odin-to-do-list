@@ -1,11 +1,11 @@
 import { format, formatDuration, intervalToDuration } from "date-fns";
 
 const domToDoItem = (item) => {
-    let toDoItem = item;
+    const toDoItem = item;
     let expanded = false;
     let deleteButtonFunction;
 
-    let e = document.createElement("div");
+    const e = document.createElement("div");
     e.classList.add("to-do-item");
 
     let expandCollapseButton;
@@ -29,15 +29,21 @@ const domToDoItem = (item) => {
 
     const setDeleteButtonFunction = (f) => {
         deleteButtonFunction = f;
-        if (deleteButton)
-            drawDeleteButton(); /* Resetting element here to clear existing eventListener(s) */
+        if (deleteButton) {
+            drawDeleteButton();
+        } /* Resetting element here to clear existing eventListener(s) */
     };
 
     const draw = () => {
         while (e.firstChild) e.lastChild.remove();
 
-        if (expanded) e.classList.add("expanded");
-        else e.classList.add("collapsed");
+        if (expanded) {
+            e.classList.add("expanded");
+            e.classList.remove("collapsed");
+        } else {
+            e.classList.add("collapsed");
+            e.classList.remove("expanded");
+        }
 
         if (toDoItem.getCompleted()) e.classList.add("completed-item");
 
@@ -115,7 +121,7 @@ const domToDoItem = (item) => {
                 dueDate.textContent = "Completed";
                 return;
             }
-            let duration = intervalToDuration({
+            const duration = intervalToDuration({
                 start: new Date(),
                 end: toDoItem.getDueDate(),
             });
@@ -137,23 +143,24 @@ const domToDoItem = (item) => {
                     .slice(0, 2),
                 delimiter: ", ",
             });
-            let remainingTimeString = ``;
+            let remainingTimeString = "";
             if (toDoItem.getDueDate() > new Date()) {
                 e.classList.remove("overdue");
                 if (remainingTimeFormat.length === 0) {
-                    remainingTimeString = ` right now`;
+                    remainingTimeString = " right now";
                 } else {
                     remainingTimeString = ` in ${remainingTimeFormat}`;
                 }
-                dueDate.textContent =
-                    `Due on ${format(toDoItem.getDueDate(), "do MMMM yyyy")}` +
-                    remainingTimeString;
+                dueDate.textContent = `Due on ${format(
+                    toDoItem.getDueDate(),
+                    "do MMMM yyyy"
+                )}${remainingTimeString}`;
             } else {
                 e.classList.add("overdue");
                 if (remainingTimeFormat.length > 0) {
                     remainingTimeString = ` for ${remainingTimeFormat}`;
                 }
-                dueDate.textContent = `Overdue` + remainingTimeString;
+                dueDate.textContent = `Overdue${remainingTimeString}`;
             }
         };
         updateDueDateString();
@@ -181,7 +188,7 @@ const domToDoItem = (item) => {
         priority.classList.add("to-do-item-priority");
         if (toDoItem) {
             for (let i = 4; i >= 0; i--) {
-                let priorityStar = document.createElement("h4");
+                const priorityStar = document.createElement("h4");
                 priorityStar.classList.add(
                     "to-do-item-priority-star",
                     "material-symbols-sharp",
@@ -242,7 +249,7 @@ const domToDoItem = (item) => {
         description.classList.add("to-do-item-description");
         expandedInfo.appendChild(description);
 
-        let descriptionLabel = document.createElement("label");
+        const descriptionLabel = document.createElement("label");
         descriptionLabel.classList.add(
             "to-do-item-description-label",
             "material-symbols-rounded"
@@ -250,26 +257,24 @@ const domToDoItem = (item) => {
         descriptionLabel.textContent = "Edit";
         description.appendChild(descriptionLabel);
 
-        let descriptionInput = document.createElement("textarea");
+        const descriptionInput = document.createElement("textarea");
         descriptionInput.classList.add("to-do-item-description-input");
         descriptionInput.setAttribute("placeholder", "No description.");
         descriptionInput.value = toDoItem.getDescription();
         descriptionInput.addEventListener("input", () => {
             toDoItem.setDescription(descriptionInput.value);
             descriptionInput.value = toDoItem.getDescription();
-            descriptionInput.style.height = 5 + "px";
-            descriptionInput.style.height =
-                descriptionInput.scrollHeight + "px";
+            descriptionInput.style.height = `${5}px`;
+            descriptionInput.style.height = `${descriptionInput.scrollHeight}px`;
         });
         descriptionLabel.appendChild(descriptionInput);
         /* Funky stuff to correctly set initial text area sizing based on the content within it */
         descriptionInput.style.height = "0px";
-        descriptionInput.style.height = descriptionInput.scrollHeight + "px";
+        descriptionInput.style.height = `${descriptionInput.scrollHeight}px`;
         if (descriptionInput.value === "") {
             descriptionInput.style.height = "0px";
             descriptionInput.value = "a";
-            descriptionInput.style.height =
-                descriptionInput.scrollHeight + "px";
+            descriptionInput.style.height = `${descriptionInput.scrollHeight}px`;
             descriptionInput.value = "";
         }
     };
@@ -300,17 +305,17 @@ const domToDoItem = (item) => {
                 );
                 toDoItem.setNote(index, newNoteInput.value);
                 newNoteInput.value = toDoItem.getNotes()[index];
-                newNoteInput.style.height = 5 + "px";
-                newNoteInput.style.height = newNoteInput.scrollHeight + "px";
+                newNoteInput.style.height = `${5}px`;
+                newNoteInput.style.height = `${newNoteInput.scrollHeight}px`;
             });
             newNote.appendChild(newNoteInput);
             /* Funky stuff to correctly set initial text area sizing based on the content within it */
             newNoteInput.style.height = "0px";
-            newNoteInput.style.height = newNoteInput.scrollHeight + "px";
+            newNoteInput.style.height = `${newNoteInput.scrollHeight}px`;
             if (newNoteInput.value === "") {
                 newNoteInput.style.height = "0px";
                 newNoteInput.value = "a";
-                newNoteInput.style.height = newNoteInput.scrollHeight + "px";
+                newNoteInput.style.height = `${newNoteInput.scrollHeight}px`;
                 newNoteInput.value = "";
             }
 
@@ -374,9 +379,8 @@ const domToDoItem = (item) => {
                     checklistList.children,
                     newChecklistItemContainer
                 );
-                toDoItem.setChecklistItem(
+                toDoItem.setChecklistItemState(
                     index,
-                    newChecklistItemInput.value,
                     newChecklistItemCheckbox.checked
                 );
             });
@@ -393,27 +397,22 @@ const domToDoItem = (item) => {
                     checklistList.children,
                     newChecklistItemContainer
                 );
-                toDoItem.setChecklistItem(
+                toDoItem.setChecklistItemName(
                     index,
-                    newChecklistItemInput.value,
-                    newChecklistItemCheckbox.checked
+                    newChecklistItemInput.value
                 );
-                newChecklistItemInput.value = toDoItem
-                    .getChecklist()
-                    [index].getName();
-                newChecklistItemInput.style.height = 5 + "px";
-                newChecklistItemInput.style.height =
-                    newChecklistItemInput.scrollHeight + "px";
+                newChecklistItemInput.value =
+                    toDoItem.getChecklistItemName(index);
+                newChecklistItemInput.style.height = `${5}px`;
+                newChecklistItemInput.style.height = `${newChecklistItemInput.scrollHeight}px`;
             });
             newChecklistItemContainer.appendChild(newChecklistItemInput);
             newChecklistItemInput.style.height = "0px";
-            newChecklistItemInput.style.height =
-                newChecklistItemInput.scrollHeight + "px";
+            newChecklistItemInput.style.height = `${newChecklistItemInput.scrollHeight}px`;
             if (newChecklistItemInput.value === "") {
                 newChecklistItemInput.style.height = "0px";
                 newChecklistItemInput.value = "a";
-                newChecklistItemInput.style.height =
-                    newChecklistItemInput.scrollHeight + "px";
+                newChecklistItemInput.style.height = `${newChecklistItemInput.scrollHeight}px`;
                 newChecklistItemInput.value = "";
             }
 
@@ -435,11 +434,13 @@ const domToDoItem = (item) => {
             newChecklistItemContainer.appendChild(newChecklistItemDeleteButton);
         };
 
-        toDoItem
-            .getChecklist()
-            .forEach((item) =>
-                newChecklistItem(item.getName(), item.getState())
+        const checklistLength = toDoItem.getChecklistLength();
+        for (let i = 0; i < checklistLength; i++) {
+            newChecklistItem(
+                toDoItem.getChecklistItemName(i),
+                toDoItem.getChecklistItemState(i)
             );
+        }
 
         const newChecklistItemButton = document.createElement("button");
         newChecklistItemButton.classList.add(
@@ -458,6 +459,8 @@ const domToDoItem = (item) => {
         drawDueDate();
     };
 
+    const toJSON = () => toDoItem.toJSON();
+
     draw();
 
     return {
@@ -465,6 +468,7 @@ const domToDoItem = (item) => {
         setExpanded,
         setDeleteButtonFunction,
         refresh,
+        toJSON,
     };
 };
 export default domToDoItem;

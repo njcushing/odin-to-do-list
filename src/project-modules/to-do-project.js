@@ -1,4 +1,4 @@
-import toDoItem from "./../to-do-item-modules/to-do-item.js";
+import toDoItem from "../to-do-item-modules/to-do-item.js";
 
 const toDoProject = (n = "Project Name") => {
     let name = "Project Name";
@@ -12,81 +12,91 @@ const toDoProject = (n = "Project Name") => {
     };
     let sortOrder = ["STATUS", "DUE_BY"];
     let items = [];
+    let itemUniqueID = 0;
     let dateCreated = new Date();
+    const maxItemsAllowance = 100;
 
     const setName = (x) => {
         if (typeof x !== "string") return;
         if (x.length > 75) x = x.slice(0, 75);
         name = x;
     };
-    const getName = () => {
-        return name;
-    };
+    const getName = () => name;
 
     const setSort = (group, type) => {
         switch (group) {
             case "DATE_ADDED":
                 switch (type) {
                     case "NONE":
-                        sorts["DATE_ADDED"] = "NONE";
+                        sorts.DATE_ADDED = "NONE";
                         break;
                     case "NEWEST":
-                        sorts["DATE_ADDED"] = "NEWEST";
+                        sorts.DATE_ADDED = "NEWEST";
                         break;
                     case "OLDEST":
-                        sorts["DATE_ADDED"] = "OLDEST";
+                        sorts.DATE_ADDED = "OLDEST";
+                        break;
+                    default:
                         break;
                 }
                 break;
             case "DUE_BY":
                 switch (type) {
                     case "NONE":
-                        sorts["DUE_BY"] = "NONE";
+                        sorts.DUE_BY = "NONE";
                         break;
                     case "SOONER":
-                        sorts["DUE_BY"] = "SOONER";
+                        sorts.DUE_BY = "SOONER";
                         break;
                     case "LATER":
-                        sorts["DUE_BY"] = "LATER";
+                        sorts.DUE_BY = "LATER";
+                        break;
+                    default:
                         break;
                 }
                 break;
             case "PRIORITY":
                 switch (type) {
                     case "NONE":
-                        sorts["PRIORITY"] = "NONE";
+                        sorts.PRIORITY = "NONE";
                         break;
                     case "HIGH":
-                        sorts["PRIORITY"] = "HIGH";
+                        sorts.PRIORITY = "HIGH";
                         break;
                     case "LOW":
-                        sorts["PRIORITY"] = "LOW";
+                        sorts.PRIORITY = "LOW";
+                        break;
+                    default:
                         break;
                 }
                 break;
             case "STATUS":
                 switch (type) {
                     case "NONE":
-                        sorts["STATUS"] = "NONE";
+                        sorts.STATUS = "NONE";
                         break;
                     case "INCOMPLETE":
-                        sorts["STATUS"] = "INCOMPLETE";
+                        sorts.STATUS = "INCOMPLETE";
                         break;
                     case "COMPLETE":
-                        sorts["STATUS"] = "COMPLETE";
+                        sorts.STATUS = "COMPLETE";
+                        break;
+                    default:
                         break;
                 }
                 break;
             case "ALPHABETICAL":
                 switch (type) {
                     case "NONE":
-                        sorts["ALPHABETICAL"] = "NONE";
+                        sorts.ALPHABETICAL = "NONE";
                         break;
                     case "NORMAL":
-                        sorts["ALPHABETICAL"] = "NORMAL";
+                        sorts.ALPHABETICAL = "NORMAL";
                         break;
                     case "REVERSED":
-                        sorts["ALPHABETICAL"] = "REVERSED";
+                        sorts.ALPHABETICAL = "REVERSED";
+                        break;
+                    default:
                         break;
                 }
                 break;
@@ -97,15 +107,15 @@ const toDoProject = (n = "Project Name") => {
     const getSort = (group) => {
         switch (group) {
             case "DATE_ADDED":
-                return sorts["DATE_ADDED"];
+                return sorts.DATE_ADDED;
             case "DUE_BY":
-                return sorts["DUE_BY"];
+                return sorts.DUE_BY;
             case "PRIORITY":
-                return sorts["PRIORITY"];
+                return sorts.PRIORITY;
             case "STATUS":
-                return sorts["STATUS"];
+                return sorts.STATUS;
             case "ALPHABETICAL":
-                return sorts["ALPHABETICAL"];
+                return sorts.ALPHABETICAL;
             default:
                 break;
         }
@@ -113,26 +123,36 @@ const toDoProject = (n = "Project Name") => {
     const setSortOrder = (ord) => {
         sortOrder = ord;
     };
-    const getSortOrder = () => {
-        return sortOrder;
-    };
+    const getSortOrder = () => sortOrder;
 
     const addToDoItem = () => {
-        let newItem = toDoItem();
-        items.push(newItem);
-        return newItem;
+        if (items.length < maxItemsAllowance) {
+            const newItem = toDoItem();
+            newItem.setUniqueID(itemUniqueID);
+            itemUniqueID++;
+            newItem.toJSON();
+            items.push(newItem);
+            return newItem;
+        }
+        return null;
+    };
+    const getNewUniqueID = () => {
+        const newID = itemUniqueID;
+        itemUniqueID++;
+        return newID;
+    };
+    const setToDoItem = (i, item) => {
+        if (typeof i !== "number") return;
+        if (i < 0 || i >= items.length) return;
+        items[i] = item;
     };
     const appendExistingToDoItem = (item) => {
-        items.push(item);
+        if (items.length < maxItemsAllowance) items.push(item);
     };
-    const removeToDoItemByIndex = (x) => {
-        if (typeof x !== "number") return;
-        if (x < 0 || x >= items.length) return;
-        items.splice(x, 1);
-    };
-    const removeToDoItemByReference = (r) => {
-        const index = items.indexOf(r);
-        if (index !== -1) items.splice(index, 1);
+    const removeToDoItem = (i) => {
+        if (typeof i !== "number") return;
+        if (i < 0 || i >= items.length) return;
+        items.splice(i, 1);
     };
     const getToDoItem = (x) => {
         if (typeof x !== "number") return;
@@ -140,75 +160,93 @@ const toDoProject = (n = "Project Name") => {
         return items[x];
     };
     const getToDoItems = () => {
-        return items;
-    };
-    const getToDoItemsSorted = () => {
-        let sortedArray = getToDoItems().slice();
-        sortedArray.sort((a, b) => {
+        items.sort((aJSON, bJSON) => {
             for (let i = 0; i < sortOrder.length; i++) {
                 const group = sortOrder[i];
+                const a = JSON.parse(aJSON);
+                const b = JSON.parse(bJSON);
+                const aDateCreated = new Date(a.dateCreated);
+                const bDateCreated = new Date(b.dateCreated);
+                const aDueDate = new Date(a.dueDate);
+                const bDueDate = new Date(b.dueDate);
                 switch (group) {
                     case "DATE_ADDED":
                         if (
-                            sorts["DATE_ADDED"] === "NONE" ||
-                            a.getDateCreated() === b.getDateCreated()
+                            sorts.DATE_ADDED === "NONE" ||
+                            aDateCreated === bDateCreated
                         ) {
                             break;
                         }
-                        return sorts["DATE_ADDED"] === "NEWEST"
-                            ? a.getDateCreated() - b.getDateCreated()
-                            : b.getDateCreated() - a.getDateCreated();
+                        return sorts.DATE_ADDED === "NEWEST"
+                            ? aDateCreated - bDateCreated
+                            : bDateCreated - aDateCreated;
                     case "DUE_BY":
-                        if (
-                            sorts["DUE_BY"] === "NONE" ||
-                            a.getDueDate() === b.getDueDate()
-                        ) {
+                        if (sorts.DUE_BY === "NONE" || aDueDate === bDueDate) {
                             break;
                         }
-                        return sorts["DUE_BY"] === "SOONER"
-                            ? a.getDueDate() - b.getDueDate()
-                            : b.getDueDate() - a.getDueDate();
+                        return sorts.DUE_BY === "SOONER"
+                            ? aDueDate - bDueDate
+                            : bDueDate - aDueDate;
                     case "PRIORITY":
                         if (
-                            sorts["PRIORITY"] === "NONE" ||
-                            a.getPriority() === b.getPriority()
+                            sorts.PRIORITY === "NONE" ||
+                            a.priority === b.priority
                         ) {
                             break;
                         }
-                        return sorts["PRIORITY"] === "LOW"
-                            ? a.getPriority() - b.getPriority()
-                            : b.getPriority() - a.getPriority();
+                        return sorts.PRIORITY === "LOW"
+                            ? a.priority - b.priority
+                            : b.priority - a.priority;
                     case "STATUS":
                         if (
-                            sorts["STATUS"] === "NONE" ||
-                            a.getCompleted() === b.getCompleted()
+                            sorts.STATUS === "NONE" ||
+                            a.completed === b.completed
                         ) {
                             break;
                         }
-                        return sorts["STATUS"] === "INCOMPLETE"
-                            ? a.getCompleted() - b.getCompleted()
-                            : b.getCompleted() - a.getCompleted();
+                        return sorts.STATUS === "INCOMPLETE"
+                            ? a.completed - b.completed
+                            : b.completed - a.completed;
                     case "ALPHABETICAL":
                         if (
-                            sorts["ALPHABETICAL"] === "NONE" ||
-                            a.getName().localeCompare(b.getName()) === 0
+                            sorts.ALPHABETICAL === "NONE" ||
+                            a.name.localeCompare(b.name) === 0
                         ) {
                             break;
                         }
-                        return sorts["ALPHABETICAL"] === "NORMAL"
-                            ? a.getName().localeCompare(b.getName())
-                            : b.getName().localeCompare(a.getName());
+                        return sorts.ALPHABETICAL === "NORMAL"
+                            ? a.name.localeCompare(b.name)
+                            : b.name.localeCompare(a.name);
                     default:
                         return 0;
                 }
             }
             return 0;
         });
-        return sortedArray;
+        return items;
     };
 
-    const getDateCreated = () => {
-        return dateCreated;
+    const getDateCreated = () => dateCreated;
+
+    const getMaxItemsAllowance = () => maxItemsAllowance;
+
+    const toJSON = () =>
+        JSON.stringify({
+            name,
+            sorts,
+            sortOrder,
+            items,
+            dateCreated,
+            itemUniqueID,
+        });
+    const fromJSON = (json) => {
+        const parsed = JSON.parse(json);
+        setName(parsed.name);
+        sorts = parsed.sorts;
+        sortOrder = parsed.sortOrder;
+        items = parsed.items;
+        dateCreated = new Date(parsed.dateCreated);
+        itemUniqueID = parsed.itemUniqueID;
     };
 
     return {
@@ -219,13 +257,16 @@ const toDoProject = (n = "Project Name") => {
         setSortOrder,
         getSortOrder,
         addToDoItem,
+        getNewUniqueID,
+        setToDoItem,
         appendExistingToDoItem,
-        removeToDoItemByIndex,
-        removeToDoItemByReference,
+        removeToDoItem,
         getToDoItem,
         getToDoItems,
-        getToDoItemsSorted,
         getDateCreated,
+        getMaxItemsAllowance,
+        toJSON,
+        fromJSON,
     };
 };
 export default toDoProject;

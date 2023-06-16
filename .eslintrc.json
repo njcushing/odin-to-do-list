@@ -17,6 +17,6 @@
         "wrap-iife": ["error", "inside"],
         "no-plusplus": ["error", { "allowForLoopAfterthoughts": true }],
         "no-use-before-define": ["error", { "variables": false }],
-        "no-underscore-dangle": "off",
+        "no-underscore-dangle": "off"
     }
 }

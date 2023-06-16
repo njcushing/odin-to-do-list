@@ -6,62 +6,86 @@ import toDoItem from "./to-do-item-modules/to-do-item.js";
 import domToDoItem from "./to-do-item-modules/dom_to-do-item.js";
 import projectListTabStyles from "./styles/styles-tab-projectlist.lazy.css";
 import projectTabStyles from "./styles/styles-tab-project.lazy.css";
+import { storageAvailable } from "./useful.js";
 
 const displayController = (() => {
-    let page;
-    let header;
+    const page = document.createElement("div");
+    page.classList.add("page");
+    document.querySelector("body").appendChild(page);
+    const header = document.createElement("div");
+    header.classList.add("header");
+    page.appendChild(header);
     let title;
     let projectNameLabel;
     let projectNameInput;
-    let content;
+    const content = document.createElement("div");
+    content.classList.add("content");
+    page.appendChild(content);
     let newProjectFormCover;
-    let currentProject;
+    let currentProject = -1;
+    const maxProjectAllowance = 100;
 
     const projects = (() => {
         let projectList = [];
 
         const newProject = (n) => {
+            if (projectList.length < maxProjectAllowance) {
+                for (let i = 0; i < projectList.length; i++) {
+                    const listProject = JSON.parse(projectList[i]);
+                    if (listProject.name === n) return null;
+                }
+                const project = toDoProject(n);
+                projectList.push(project.toJSON());
+                saveProjectsToLocalStorage();
+                return newProject;
+            }
+            return null;
+        };
+        const checkProjectNameIsAvailable = (name) => {
             for (let i = 0; i < projectList.length; i++) {
-                if (projectList[i].getName() === n) {
-                    console.log("This project name is already taken.");
-                    return null;
+                const parsedProject = toDoProject();
+                parsedProject.fromJSON(projectList[i]);
+                if (parsedProject.getName() === name) {
+                    return false;
                 }
             }
-            const newProject = toDoProject(n);
-            projectList.push(newProject);
-            return newProject;
+            return true;
         };
-        const getProjects = () => {
-            return projectList;
+        const setProject = (i, project) => {
+            if (i < 0 || i > projectList.length) return;
+            projectList[i] = project;
         };
-        const removeProject = (n) => {
-            for (let i = 0; i < projectList.length; i++) {
-                if (projectList[i].getName() === n) projectList.splice(i, 1);
+        const getProjects = () => projectList;
+        const removeProject = (i) => {
+            if (i < 0 || i > projectList.length) return;
+            projectList.splice(i, 1);
+            saveProjectsToLocalStorage();
+        };
+        const loadProjectsFromLocalStorage = () => {
+            projectList = JSON.parse(localStorage.getItem("projects") || "[]");
+        };
+        const saveProjectsToLocalStorage = () => {
+            localStorage.setItem("projects", JSON.stringify(projectList));
+        };
+
+        if (storageAvailable("localStorage")) {
+            if (!localStorage.getItem("projects")) {
+                currentProject = 0;
+                newProject("My New Project");
+            } else {
+                loadProjectsFromLocalStorage();
             }
-        };
+        }
 
         return {
             newProject,
+            checkProjectNameIsAvailable,
+            setProject,
             getProjects,
             removeProject,
+            loadProjectsFromLocalStorage,
+            saveProjectsToLocalStorage,
         };
-    })();
-
-    if (projects.getProjects().length === 0) {
-        currentProject = 0;
-        projects.newProject("My New Project");
-    }
-
-    const createPage = (() => {
-        page = document.createElement("div");
-        page.classList.add("page");
-        document.querySelector("body").appendChild(page);
-        header = document.createElement("div");
-        header.classList.add("header");
-        page.appendChild(header);
-        content = document.createElement("div");
-        content.classList.add("content");
-        page.appendChild(content);
     })();
 
     const refreshContent = () => {
@@ -92,38 +116,39 @@ const displayController = (() => {
         projectContainer.classList.add("project-container");
         content.appendChild(projectContainer);
 
+        let counter = 0;
         const projectList = projects.getProjects();
         for (let i = 0; i < projectList.length; i++) {
-            const newPanel = domToDoProject(projectList[i]);
-            newPanel.panel.setAttribute("index", i);
+            const current = counter;
+            const parsedProject = toDoProject();
+            parsedProject.fromJSON(projectList[i]);
+            const newPanel = domToDoProject(parsedProject);
             projectContainer.appendChild(newPanel.panel);
             newPanel.editButton.addEventListener("click", () => {
-                currentProject = newPanel.panel.getAttribute("index");
+                currentProject = current;
                 refreshContent();
             });
             newPanel.deleteButton.addEventListener("click", () => {
-                const projectList = projects.getProjects();
-                projects.removeProject(
-                    projectList[newPanel.panel.getAttribute("index")].getName()
-                );
+                projects.removeProject(newPanel.panel.getAttribute("index"));
                 newPanel.panel.remove();
                 for (let i = 0; i < projectContainer.children.length; i++) {
                     projectContainer.children[i].setAttribute("index", i);
                 }
             });
+            counter++;
         }
 
-        let newProjectPanel = document.createElement("div");
+        const newProjectPanel = document.createElement("div");
         newProjectPanel.classList.add("new-project-panel");
         projectContainer.appendChild(newProjectPanel);
         newProjectPanel.addEventListener("click", displayNewProjectForm);
 
-        let newProjectName = document.createElement("h2");
+        const newProjectName = document.createElement("h2");
         newProjectName.classList.add("new-project-panel-name", "no-select");
         newProjectName.textContent = "New Project";
         newProjectPanel.appendChild(newProjectName);
 
-        let newProjectPlus = document.createElement("h2");
+        const newProjectPlus = document.createElement("h2");
         newProjectPlus.classList.add("new-project-panel-plus", "no-select");
         newProjectPlus.textContent = "+";
         newProjectPanel.appendChild(newProjectPlus);
@@ -148,11 +173,13 @@ const displayController = (() => {
         closeButton.addEventListener("click", closeNewProjectForm);
         newProjectForm.appendChild(closeButton);
 
-        let projectNameContainer = document.createElement("li");
+        const projectNameContainer = document.createElement("li");
         projectNameContainer.classList.add("new-project-form-name");
         recreateProjectNameInput();
         projectNameInput.addEventListener("input", () => {
-            const avail = checkProjectNameIsAvailable(projectNameInput.value);
+            const avail = projects.checkProjectNameIsAvailable(
+                projectNameInput.value
+            );
             if (avail) projectNameInput.classList.remove("name-taken");
             else projectNameInput.classList.add("name-taken");
         });
@@ -177,7 +204,9 @@ const displayController = (() => {
         const formData = Object.fromEntries(
             new FormData(form.target).entries()
         );
-        const avail = checkProjectNameIsAvailable(formData["project-name"]);
+        const avail = projects.checkProjectNameIsAvailable(
+            formData["project-name"]
+        );
         if (avail) {
             projects.newProject(formData["project-name"]);
             refreshContent();
@@ -185,35 +214,41 @@ const displayController = (() => {
     };
 
     const displayProject = () => {
-        const project = projects.getProjects()[currentProject];
+        const project = toDoProject();
+        project.fromJSON(projects.getProjects()[currentProject]);
 
         recreateProjectNameInput();
         projectNameInput.value = project.getName();
         projectNameInput.addEventListener("input", () => {
-            const avail = checkProjectNameIsAvailable(projectNameInput.value);
-            if (avail || projectNameInput.value === project.getName())
+            const avail = projects.checkProjectNameIsAvailable(
+                projectNameInput.value
+            );
+            if (avail || projectNameInput.value === project.getName()) {
                 projectNameInput.classList.remove("name-taken");
-            else projectNameInput.classList.add("name-taken");
+            } else projectNameInput.classList.add("name-taken");
         });
         projectNameInput.addEventListener("focusout", () => {
-            const avail = checkProjectNameIsAvailable(projectNameInput.value);
-            if (avail && projectNameInput.checkValidity())
+            const avail = projects.checkProjectNameIsAvailable(
+                projectNameInput.value
+            );
+            if (avail && projectNameInput.checkValidity()) {
                 project.setName(projectNameInput.value);
+            }
         });
         header.appendChild(projectNameInput);
         projectNameLabel.classList.add("material-symbols-rounded");
         projectNameLabel.textContent = "Edit";
         header.appendChild(projectNameLabel);
 
-        let toDoListContainer = document.createElement("div");
+        const toDoListContainer = document.createElement("div");
         toDoListContainer.classList.add("to-do-list-container");
         content.appendChild(toDoListContainer);
 
-        let buttons = document.createElement("div");
+        const buttons = document.createElement("div");
         buttons.classList.add("project-buttons-container");
         toDoListContainer.appendChild(buttons);
 
-        let returnToListButton = document.createElement("button");
+        const returnToListButton = document.createElement("button");
         returnToListButton.classList.add(
             "project-buttons-return-to-list",
             "material-symbols-rounded",
@@ -226,11 +261,23 @@ const displayController = (() => {
             refreshContent();
         });
 
-        let newToDoItemsContainer = document.createElement("div");
+        const saveProjectButton = document.createElement("button");
+        saveProjectButton.classList.add(
+            "project-buttons-save-project",
+            "material-symbols-rounded",
+            "no-select"
+        );
+        saveProjectButton.textContent = "Save";
+        buttons.appendChild(saveProjectButton);
+        saveProjectButton.addEventListener("click", () => {
+            commitWorkingProject();
+        });
+
+        const newToDoItemsContainer = document.createElement("div");
         newToDoItemsContainer.classList.add("project-to-do-items-container");
         toDoListContainer.appendChild(newToDoItemsContainer);
 
-        let newToDoItemButton = document.createElement("button");
+        const newToDoItemButton = document.createElement("button");
         newToDoItemButton.classList.add(
             "project-buttons-new-to-do-item",
             "material-symbols-rounded",
@@ -238,34 +285,42 @@ const displayController = (() => {
         );
         newToDoItemButton.textContent = "Add";
         newToDoItemButton.addEventListener("click", () => {
-            let newItem = toDoItem();
-            let newItemElement = domToDoItem(newItem);
-            newItemElement.e.classList.add("newly-created-item");
-            newToDoItemsContainer.appendChild(newItemElement.e);
+            if (
+                project.getToDoItems().length +
+                    newToDoItemsContainer.children.length <
+                project.getMaxItemsAllowance()
+            ) {
+                const newItem = toDoItem();
+                newItem.setUniqueID(project.getNewUniqueID());
+                const newItemElement = domToDoItem(newItem);
+                newItemElement.e.classList.add("newly-created-item");
+                newToDoItemsContainer.appendChild(newItemElement.e);
 
-            newItemElement.setExpanded(true);
+                newItemElement.setExpanded(true);
 
-            let confirmButton = document.createElement("button");
-            confirmButton.classList.add(
-                "to-do-item-confirm-button",
-                "material-symbols-rounded"
-            );
-            confirmButton.textContent = "Add";
-            confirmButton.addEventListener("click", () => {
-                newToDoItemsContainer.removeChild(newItemElement.e);
-                project.appendExistingToDoItem(newItem);
-                drawToDoItems();
-            });
+                const confirmButton = document.createElement("button");
+                confirmButton.classList.add(
+                    "to-do-item-confirm-button",
+                    "material-symbols-rounded"
+                );
+                confirmButton.textContent = "Add";
+                confirmButton.addEventListener("click", () => {
+                    newToDoItemsContainer.removeChild(newItemElement.e);
+                    const itemJSON = newItem.toJSON();
+                    project.appendExistingToDoItem(itemJSON);
+                    drawToDoItems();
+                });
 
-            newItemElement.setDeleteButtonFunction(() => {
-                newToDoItemsContainer.removeChild(newItemElement.e);
-            });
+                newItemElement.setDeleteButtonFunction(() => {
+                    newToDoItemsContainer.removeChild(newItemElement.e);
+                });
 
-            newItemElement.e.appendChild(confirmButton);
+                newItemElement.e.appendChild(confirmButton);
+            }
         });
         buttons.appendChild(newToDoItemButton);
 
-        let refreshToDoItemsButton = document.createElement("button");
+        const refreshToDoItemsButton = document.createElement("button");
         refreshToDoItemsButton.classList.add(
             "project-buttons-refresh-to-do-items",
             "material-symbols-rounded",
@@ -277,7 +332,7 @@ const displayController = (() => {
         });
         buttons.appendChild(refreshToDoItemsButton);
 
-        let sortToDoItemsButton = document.createElement("button");
+        const sortToDoItemsButton = document.createElement("button");
         sortToDoItemsButton.classList.add(
             "project-buttons-sort-to-do-items",
             "material-symbols-rounded",
@@ -299,6 +354,7 @@ const displayController = (() => {
         sortOrderGroups.forEach((sortOrderGroup) => {
             sortOrderGroup.addEventListener("click", () => {
                 sortToDoItemsDropDownMenu.classList.remove("open");
+                saveWorkingProject();
                 drawToDoItems();
             });
         });
@@ -308,27 +364,40 @@ const displayController = (() => {
         sortTypes.forEach((sortType) => {
             sortType.addEventListener("click", () => {
                 sortToDoItemsDropDownMenu.classList.remove("open");
+                saveWorkingProject();
                 drawToDoItems();
             });
         });
 
         let toDoItemsContainer;
+        let toDoItems = [];
         const drawToDoItems = () => {
             if (toDoItemsContainer) toDoItemsContainer.remove();
-            const toDoItems = project.getToDoItemsSorted();
+            toDoItems = [];
+            const itemsJSON = project.getToDoItems();
             toDoItemsContainer = document.createElement("div");
             toDoItemsContainer.classList.add("project-to-do-items-container");
             toDoListContainer.appendChild(toDoItemsContainer);
-            toDoItems.forEach((item) => {
-                let newItemElement = domToDoItem(item);
+            itemsJSON.forEach((item) => {
+                const newItem = toDoItem();
+                newItem.fromJSON(item);
+                toDoItems.push(newItem);
+                const newItemElement = domToDoItem(newItem);
                 newItemElement.setDeleteButtonFunction(() => {
                     toDoItemsContainer.removeChild(newItemElement.e);
-                    project.removeToDoItemByReference(item);
+                    for (let i = 0; i < toDoItems.length; i++) {
+                        if (
+                            newItem.getUniqueID() === toDoItems[i].getUniqueID()
+                        ) {
+                            toDoItems.splice(i, 1);
+                            project.removeToDoItem(i);
+                        }
+                    }
                     if (project.getToDoItems().length === 0) drawToDoItems();
                 });
                 toDoItemsContainer.appendChild(newItemElement.e);
             });
-            if (toDoItems.length === 0) {
+            if (itemsJSON.length === 0) {
                 const toDoItemPrompt = document.createElement("div");
                 toDoItemPrompt.classList.add("to-do-item-prompt");
                 toDoItemPrompt.textContent =
@@ -337,6 +406,17 @@ const displayController = (() => {
             }
         };
         drawToDoItems();
+
+        const saveWorkingProject = () => {
+            toDoItems.forEach((item, i) => {
+                project.setToDoItem(i, item.toJSON());
+            });
+        };
+        const commitWorkingProject = () => {
+            const projectJSON = project.toJSON();
+            projects.setProject(currentProject, projectJSON);
+            projects.saveProjectsToLocalStorage();
+        };
     };
 
     const recreateProjectNameInput = () => {
@@ -360,15 +440,6 @@ const displayController = (() => {
         projectNameInput.setAttribute("required", true);
         projectNameInput.setAttribute("placeholder", " ");
         projectNameInput.setAttribute("pattern", "[A-Za-z0-9 _\\-']+");
-    };
-    const checkProjectNameIsAvailable = (name) => {
-        const projectList = projects.getProjects();
-        for (let i = 0; i < projectList.length; i++) {
-            if (projectList[i].getName() === name) {
-                return false;
-            }
-        }
-        return true;
     };
 
     const checkClickedOutside = (element) => {
